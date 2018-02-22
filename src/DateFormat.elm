@@ -1,6 +1,42 @@
 module DateFormat
     exposing
-        ( Token(..)
+        ( Token
+        , monthNumber
+        , monthSuffix
+        , monthFixed
+        , monthNameFirstThree
+        , monthNameFull
+        , dayOfMonthNumber
+        , dayOfMonthSuffix
+        , dayOfMonthFixed
+        , dayOfYearNumber
+        , dayOfYearSuffix
+        , dayOfYearFixed
+        , dayOfWeekNumber
+        , dayOfWeekSuffix
+        , dayOfWeekNameFirstTwo
+        , dayOfWeekNameFirstThree
+        , dayOfWeekNameFull
+        , yearNumberLastTwo
+        , yearNumber
+        , quarterNumber
+        , quarterSuffix
+        , weekOfYearNumber
+        , weekOfYearSuffix
+        , weekOfYearFixed
+        , amPmUppercase
+        , amPmLowercase
+        , hourMilitaryNumber
+        , hourMilitaryFixed
+        , hourNumber
+        , hourFixed
+        , hourMilitaryFromOneNumber
+        , hourMilitaryFromOneFixed
+        , minuteNumber
+        , minuteFixed
+        , secondNumber
+        , secondFixed
+        , text
         , format
         )
 
@@ -16,144 +52,446 @@ module DateFormat
 
 @docs Token
 
+
+## Month
+
+@docs monthNumber, monthSuffix, monthFixed, monthNameFirstThree, monthNameFull
+
+
+## Day of the Month
+
+@docs dayOfMonthNumber, dayOfMonthSuffix, dayOfMonthFixed
+
+
+## Day of the Year
+
+@docs dayOfYearNumber, dayOfYearSuffix, dayOfYearFixed
+
+
+## Day of the Week
+
+@docs dayOfWeekNumber, dayOfWeekSuffix, dayOfWeekNameFirstTwo, dayOfWeekNameFirstThree, dayOfWeekNameFull
+
+
+## Year
+
+@docs yearNumberLastTwo, yearNumber
+
+
+## Quarter of the Year
+
+@docs quarterNumber, quarterSuffix
+
+
+## Week of the Year
+
+@docs weekOfYearNumber, weekOfYearSuffix, weekOfYearFixed
+
+
+## AM / PM
+
+@docs amPmUppercase, amPmLowercase
+
+
+## Hour
+
+@docs hourMilitaryNumber, hourMilitaryFixed, hourNumber, hourFixed, hourMilitaryFromOneNumber, hourMilitaryFromOneFixed
+
+
+## Minute
+
+@docs minuteNumber, minuteFixed
+
+
+## Second
+
+@docs secondNumber, secondFixed
+
+
+## Other Stuff
+
+@docs text
+
 -}
 
 import Date exposing (Date, Month(..), Day(..))
 
 
+{-| Get the numeric value of the month.
+
+Examples: `1, 2, 3, ... 11, 12`
+
+-}
+monthNumber : Token
+monthNumber =
+    MonthNumber
+
+
+{-| Get the numeric value of the month, with a suffix at the end.
+
+Examples: `1st, 2nd, 3rd, ... 11th, 12th`
+
+-}
+monthSuffix : Token
+monthSuffix =
+    MonthSuffix
+
+
+{-| Get the numeric value of the month, fixed to two places.
+
+Examples: `01, 02, 03, ... 11, 12`
+
+-}
+monthFixed : Token
+monthFixed =
+    MonthFixed
+
+
+{-| Get the name of the month, but just the first three letters.
+
+Examples: `Jan, Feb, Mar, ... Nov, Dec`
+
+-}
+monthNameFirstThree : Token
+monthNameFirstThree =
+    MonthNameFirst 3
+
+
+{-| Get the full name of the month.
+
+Examples: `January, February, ... December`
+
+-}
+monthNameFull : Token
+monthNameFull =
+    MonthNameFull
+
+
+{-| Get the numeric value of the day of the month.
+
+Examples: `1, 2, 3, ... 30, 31`
+
+-}
+dayOfMonthNumber : Token
+dayOfMonthNumber =
+    DayOfMonthNumber
+
+
+{-| Get the numeric value of the day of the month, with a suffix at the end.
+
+Examples: `1st, 2nd, 3rd, ... 30th, 31st`
+
+-}
+dayOfMonthSuffix : Token
+dayOfMonthSuffix =
+    DayOfMonthSuffix
+
+
+{-| Get the numeric value of the day of the month, fixed to two places.
+
+Examples: `01, 02, 03, ... 30, 31`
+
+-}
+dayOfMonthFixed : Token
+dayOfMonthFixed =
+    DayOfMonthFixed
+
+
+{-| Get the numeric value of the day of the year.
+
+Examples: `1, 2, 3, ... 364, 365`
+
+-}
+dayOfYearNumber : Token
+dayOfYearNumber =
+    DayOfYearNumber
+
+
+{-| Get the numeric value of the day of the year, with a suffix at the end.
+
+Examples: `1st, 2nd, 3rd, ... 364th, 365th`
+
+-}
+dayOfYearSuffix : Token
+dayOfYearSuffix =
+    DayOfYearSuffix
+
+
+{-| Get the numeric value of the day of the year.
+
+Examples: `001, 002, 003, ... 364, 365`
+
+-}
+dayOfYearFixed : Token
+dayOfYearFixed =
+    DayOfYearFixed
+
+
+{-| Get the numeric value of the day of the week.
+
+Examples: `0, 1, 2, ... 5, 6`
+
+-}
+dayOfWeekNumber : Token
+dayOfWeekNumber =
+    DayOfWeekNumber
+
+
+{-| Get the numeric value of the day of the week, with a suffix at the end.
+
+Examples: `0th, 1st, 2nd, ... 5th, 6th`
+
+-}
+dayOfWeekSuffix : Token
+dayOfWeekSuffix =
+    DayOfWeekSuffix
+
+
+{-| Gets the name of the day of the week, but just the first two letters.
+
+Examples: `Su, Mo, Tue, ... Fr, Sa`
+
+-}
+dayOfWeekNameFirstTwo : Token
+dayOfWeekNameFirstTwo =
+    DayOfWeekNameFirst 2
+
+
+{-| Gets the name of the day of the week, but just the first three letters.
+
+Examples: `Sun, Mon, Tue, ... Fri, Sat`
+
+-}
+dayOfWeekNameFirstThree : Token
+dayOfWeekNameFirstThree =
+    DayOfWeekNameFirst 3
+
+
+{-| Gets the full name of the day of the week.
+
+Examples: `Sunday, Monday, ... Friday, Saturday`
+
+-}
+dayOfWeekNameFull : Token
+dayOfWeekNameFull =
+    DayOfWeekNameFull
+
+
+{-| Get the year, but just the last two letters.
+
+Examples: `70, 71, ... 29, 30`
+
+-}
+yearNumberLastTwo : Token
+yearNumberLastTwo =
+    YearNumberLastTwo
+
+
+{-| Get the year, upwards of 10,000.
+
+Examples: `70, 71, ... 9999, ...`
+
+-}
+yearNumber : Token
+yearNumber =
+    YearNumber
+
+
+{-| Get the numeric value for the quarter of the year, with a suffix.
+
+Examples: `1, 2, 3, 4`
+
+-}
+quarterNumber : Token
+quarterNumber =
+    QuarterNumber
+
+
+{-| Get the numeric value for the quarter of the year, with a suffix.
+
+Examples: `1st, 2nd, 3rd, 4th`
+
+-}
+quarterSuffix : Token
+quarterSuffix =
+    QuarterSuffix
+
+
+{-| Get the numeric value for the week of the year.
+
+Examples: `1, 2, 3, ... 51, 52`
+
+-}
+weekOfYearNumber : Token
+weekOfYearNumber =
+    WeekOfYearNumber
+
+
+{-| Get the numeric value for the week of the year, with a suffix at the end.
+
+Examples: `1st, 2nd, 3rd, ... 51st, 52nd`
+
+-}
+weekOfYearSuffix : Token
+weekOfYearSuffix =
+    WeekOfYearSuffix
+
+
+{-| Get the numeric value for the week of the year, fixed to two places.
+
+Examples: `01, 02, 03, ... 51, 52`
+
+-}
+weekOfYearFixed : Token
+weekOfYearFixed =
+    WeekOfYearFixed
+
+
+{-| Get the AM / PM value of the hour, in uppercase.
+
+Examples: `AM, PM`
+
+-}
+amPmUppercase : Token
+amPmUppercase =
+    AmPmUppercase
+
+
+{-| Get the AM / PM value of the hour, in uppercase.
+
+Examples: `am, pm`
+
+-}
+amPmLowercase : Token
+amPmLowercase =
+    AmPmLowercase
+
+
+{-| Get the hour of the 24-hour day.
+
+Examples: `0, 1, 2, ... 22, 23`
+
+-}
+hourMilitaryNumber : Token
+hourMilitaryNumber =
+    HourMilitaryNumber
+
+
+{-| Get the hour of the 24-hour day, fixed to two places.
+
+Examples: `00, 01, 02, ... 22, 23`
+
+-}
+hourMilitaryFixed : Token
+hourMilitaryFixed =
+    HourMilitaryFixed
+
+
+{-| Get the hour of the 12-hour day.
+
+Examples: `0, 1, 2, ... 11, 12`
+
+-}
+hourNumber : Token
+hourNumber =
+    HourNumber
+
+
+{-| Get the hour of the 12-hour day, fixed to two places.
+
+Examples: `00, 01, 02, ... 11, 12`
+
+-}
+hourFixed : Token
+hourFixed =
+    HourFixed
+
+
+{-| Get the hour of the 24-hour day, starting from one.
+
+Examples: `1, 2, ... 23, 24`
+
+-}
+hourMilitaryFromOneNumber : Token
+hourMilitaryFromOneNumber =
+    HourMilitaryFromOneNumber
+
+
+{-| Get the hour of the 24-hour day, starting from one, fixed to two places.
+
+Examples: `01, 02, ... 23, 24`
+
+-}
+hourMilitaryFromOneFixed : Token
+hourMilitaryFromOneFixed =
+    HourMilitaryFromOneFixed
+
+
+{-| Get the minute of the hour.
+
+Examples: `0, 1, 2, ... 58, 59`
+
+-}
+minuteNumber : Token
+minuteNumber =
+    MinuteNumber
+
+
+{-| Get the minute of the hour, fixed to two places.
+
+Examples: `00, 01, 02, ... 58, 59`
+
+-}
+minuteFixed : Token
+minuteFixed =
+    MinuteFixed
+
+
+{-| Get the second of the minute.
+
+Examples: `0, 1, 2, ... 58, 59`
+
+-}
+secondNumber : Token
+secondNumber =
+    SecondNumber
+
+
+{-| Get the second of the minute, fixed to two places.
+
+Examples: `00, 01, 02, ... 58, 59`
+
+-}
+secondFixed : Token
+secondFixed =
+    SecondFixed
+
+
+{-| Represent a string value
+
+    formatter : Date -> String
+    formatter =
+        DateFormat.format
+            [ DateFormat.hourMilitaryFixed
+            , DateFormat.text ":"
+            , DateFormat.minuteFixed
+            ]
+
+Could be given a date to return something like `"23:15"` or `"04:43"`
+
+-}
+text : String -> Token
+text =
+    Text
+
+
 {-| These are the available tokens to help you format dates.
-
-
-## Month
-
-**`MonthNumber`** - `1, 2, 3, ... 11, 12`
-
-**`MonthSuffix`** - `1st, 2nd, 3rd, ... 11th, 12th`
-
-**`MonthFixed`** - `01, 02, 03, ... 11, 12`
-
-**`MonthNameFirstThree`** - `Jan, Feb, Mar, ... Nov, Dec`
-
-**`MonthNameFull`** - `January, February, ... December`
-
----
-
-
-## Day of the Month
-
-**`DayOfMonthNumber`** - `1, 2, 3, ... 30, 31`
-
-**`DayOfMonthSuffix`** - `1st, 2nd, 3rd, ... 30th, 31st`
-
-**`DayOfMonthFixed`** - `01, 02, 03, ... 30, 31`
-
----
-
-
-## Day of the Year
-
-**`DayOfYearNumber`** - `1, 2, 3, ... 364, 365`
-
-**`DayOfYearSuffix`** - `1st, 2nd, 3rd, ... 364th, 365th`
-
-**`DayOfYearFixed`** - `001, 002, 003, ... 364, 365`
-
----
-
-
-## Day of the Week
-
-**`DayOfWeekNumber`** - `0, 1, 2, ... 5, 6`
-
-**`DayOfWeekSuffix`** - `0th, 1st, 2nd, ... 5th, 6th`
-
-**`DayOfWeekNameFirstTwo`** - `Su, Mo, Tue, ... Fr, Sa`
-
-**`DayOfWeekNameFirstThree`** - `Sun, Mon, Tue, ... Fri, Sat`
-
-**`DayOfWeekNameFull`** - `Sunday, Monday, ... Friday, Saturday`
-
----
-
-
-## Year
-
-**`YearNumberLastTwo`** - `70, 71, ... 29, 30`
-
-**`YearNumberCapped`** - `1970, 1971, ... 2029, 2030`
-
-**`YearNumber`** - `70, 71, ... 9999, ...`
-
----
-
-
-## Quarter of the Year
-
-**`QuarterNumber`** - `1, 2, 3, 4`
-
-**`QuarterSuffix`** - `1st, 2nd, 3rd, 4th`
-
----
-
-
-## Week of the Year
-
-**`WeekOfYearNumber`** - `1, 2, 3, ... 51, 52`
-
-**`WeekOfYearSuffix`** - `1st, 2nd, 3rd, ... 51st, 52nd`
-
-**`WeekOfYearFixed`** - `01, 02, 03, ... 51, 52`
-
----
-
-
-## AM / PM
-
-**`AmPmUppercase`** - `AM, PM`
-
-**`AmPmLowercase`** - `am, pm`
-
----
-
-
-## Hour
-
-**`HourMilitaryNumber`** - `0, 1, 2, ... 22, 23`
-
-**`HourMilitaryFixed`** - `00, 01, 02, ... 22, 23`
-
-**`HourNumber`** - `0, 1, 2, ... 11, 12`
-
-**`HourFixed`** - `00, 01, 02, ... 11, 12`
-
-**`HourMilitaryFromOneNumber`** - `1, 2, ... 23, 24`
-
-**`HourMilitaryFromOneFixed`** - `01, 02, ... 23, 24`
-
----
-
-
-## Minute
-
-**`MinuteNumber`** - `0, 1, 2, ... 58, 59`
-
-**`MinuteFixed`** - `00, 01, 02, ... 58, 59`
-
----
-
-
-## Second
-
-**`SecondNumber`** - `0, 1, 2, ... 58, 59`
-
-**`SecondFixed`** - `00, 01, 02, ... 58, 59`
-
 -}
 type Token
     = MonthNumber
     | MonthSuffix
     | MonthFixed
-    | MonthNameFirstThree
+    | MonthNameFirst Int
     | MonthNameFull
     | DayOfMonthNumber
     | DayOfMonthSuffix
@@ -163,11 +501,9 @@ type Token
     | DayOfYearFixed
     | DayOfWeekNumber
     | DayOfWeekSuffix
-    | DayOfWeekNameFirstTwo
-    | DayOfWeekNameFirstThree
+    | DayOfWeekNameFirst Int
     | DayOfWeekNameFull
     | YearNumberLastTwo
-    | YearNumberCapped
     | YearNumber
     | QuarterNumber
     | QuarterSuffix
@@ -195,29 +531,29 @@ Let's say `someDate` is on November 15, 1993 at 15:06.
 
     -- "15:06"
     format
-        [ HourMilitaryFixed
-        , Text ":"
-        , MinuteFixed
+        [ hourMilitaryFixed
+        , text ":"
+        , minuteFixed
         ]
         someDate
 
     -- "3:06 pm"
     format
-        [ HourNumber
-        , Text ":"
-        , MinuteFixed
-        , Text " "
-        , AmPmLowercase
+        [ hourNumber
+        , text ":"
+        , minuteFixed
+        , text " "
+        , amPmLowercase
         ]
         someDate
 
     -- "Nov 15th, 1993"
     format
-        [ MonthNameFirstThree
-        , Text " "
-        , DayOfMonthSuffix
-        , Text ", "
-        , YearNumber
+        [ monthNameFirstThree
+        , text " "
+        , dayOfMonthSuffix
+        , text ", "
+        , yearNumber
         ]
         someDate
 
@@ -265,20 +601,20 @@ piece : Date -> Token -> String
 piece date token =
     case token of
         MonthNumber ->
-            monthNumber date
+            monthNumber_ date
                 |> toString
 
         MonthSuffix ->
-            monthNumber date
+            monthNumber_ date
                 |> toSuffix
 
         MonthFixed ->
-            monthNumber date
+            monthNumber_ date
                 |> toFixedLength
 
-        MonthNameFirstThree ->
-            Date.month date
-                |> toString
+        MonthNameFirst num ->
+            fullMonthName date
+                |> String.left num
 
         MonthNameFull ->
             fullMonthName date
@@ -323,13 +659,9 @@ piece date token =
             dayOfWeek date
                 |> toSuffix
 
-        DayOfWeekNameFirstTwo ->
+        DayOfWeekNameFirst num ->
             dayOfWeekName date
-                |> String.left 2
-
-        DayOfWeekNameFirstThree ->
-            dayOfWeekName date
-                |> String.left 3
+                |> String.left num
 
         DayOfWeekNameFull ->
             dayOfWeekName date
@@ -349,9 +681,6 @@ piece date token =
         YearNumberLastTwo ->
             year date
                 |> String.right 2
-
-        YearNumberCapped ->
-            year date
 
         YearNumber ->
             year date
@@ -429,8 +758,8 @@ monthPair date =
         |> Maybe.withDefault ( 0, Jan )
 
 
-monthNumber : Date -> Int
-monthNumber date =
+monthNumber_ : Date -> Int
+monthNumber_ date =
     monthPair date
         |> (\( i, m ) -> i)
         |> (+) 1
@@ -525,7 +854,7 @@ daysInMonth year month =
 
 quarter : Date -> Int
 quarter date =
-    (monthNumber date) // 4
+    (monthNumber_ date) // 4
 
 
 
@@ -546,7 +875,7 @@ dayOfYear date =
     let
         monthsBeforeThisOne : List Month
         monthsBeforeThisOne =
-            List.take (monthNumber date) months
+            List.take ((monthNumber_ date) - 1) months
 
         daysBeforeThisMonth : Int
         daysBeforeThisMonth =

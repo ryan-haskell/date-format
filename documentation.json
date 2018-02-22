@@ -1,172 +1,201 @@
 [
   {
     "name": "DateFormat",
-    "comment": " A reliable way to format dates with elm\n\n\n# The `format` function\n\n@docs format\n\n\n# Available formatting options\n\n@docs Token\n\n",
+    "comment": " A reliable way to format dates with elm\n\n\n# The `format` function\n\n@docs format\n\n\n# Available formatting options\n\n@docs Token\n\n\n## Month\n\n@docs monthNumber, monthSuffix, monthFixed, monthNameFirstThree, monthNameFull\n\n\n## Day of the Month\n\n@docs dayOfMonthNumber, dayOfMonthSuffix, dayOfMonthFixed\n\n\n## Day of the Year\n\n@docs dayOfYearNumber, dayOfYearSuffix, dayOfYearFixed\n\n\n## Day of the Week\n\n@docs dayOfWeekNumber, dayOfWeekSuffix, dayOfWeekNameFirstTwo, dayOfWeekNameFirstThree, dayOfWeekNameFull\n\n\n## Year\n\n@docs yearNumberLastTwo, yearNumber\n\n\n## Quarter of the Year\n\n@docs quarterNumber, quarterSuffix\n\n\n## Week of the Year\n\n@docs weekOfYearNumber, weekOfYearSuffix, weekOfYearFixed\n\n\n## AM / PM\n\n@docs amPmUppercase, amPmLowercase\n\n\n## Hour\n\n@docs hourMilitaryNumber, hourMilitaryFixed, hourNumber, hourFixed, hourMilitaryFromOneNumber, hourMilitaryFromOneFixed\n\n\n## Minute\n\n@docs minuteNumber, minuteFixed\n\n\n## Second\n\n@docs secondNumber, secondFixed\n\n\n## Other Stuff\n\n@docs text\n\n",
     "aliases": [],
     "types": [
       {
         "name": "Token",
-        "comment": " These are the available tokens to help you format dates.\n\n\n## Month\n\n**`MonthNumber`** - `1, 2, 3, ... 11, 12`\n\n**`MonthSuffix`** - `1st, 2nd, 3rd, ... 11th, 12th`\n\n**`MonthFixed`** - `01, 02, 03, ... 11, 12`\n\n**`MonthNameFirstThree`** - `Jan, Feb, Mar, ... Nov, Dec`\n\n**`MonthNameFull`** - `January, February, ... December`\n\n---\n\n\n## Day of the Month\n\n**`DayOfMonthNumber`** - `1, 2, 3, ... 30, 31`\n\n**`DayOfMonthSuffix`** - `1st, 2nd, 3rd, ... 30th, 31st`\n\n**`DayOfMonthFixed`** - `01, 02, 03, ... 30, 31`\n\n---\n\n\n## Day of the Year\n\n**`DayOfMonthNumber`** - `1, 2, 3, ... 364, 365`\n\n**`DayOfMonthSuffix`** - `1st, 2nd, 3rd, ... 364th, 365th`\n\n**`DayOfMonthFixed`** - `001, 002, 003, ... 364, 365`\n\n---\n\n\n## Day of the Week\n\n**`DayOfWeekNumber`** - `0, 1, 2, ... 5, 6`\n\n**`DayOfWeekSuffix`** - `0th, 1st, 2nd, ... 5th, 6th`\n\n**`DayOfWeekNameFirstTwo`** - `Su, Mo, Tue, ... Fr, Sa`\n\n**`DayOfWeekNameFirstThree`** - `Sun, Mon, Tue, ... Fri, Sat`\n\n**`DayOfWeekNameFull`** - `Sunday, Monday, ... Friday, Saturday`\n\n---\n\n\n## Year\n\n**`YearNumberLastTwo`** - `70, 71, ... 29, 30`\n\n**`YearNumberCapped`** - `1970, 1971, ... 2029, 2030`\n\n**`YearNumber`** - `70, 71, ... 9999, ...`\n\n---\n\n\n## Quarter of the Year\n\n**`QuarterNumber`** - `1, 2, 3, 4`\n\n**`QuarterSuffix`** - `1st, 2nd, 3rd, 4th`\n\n---\n\n\n## Week of the Year\n\n**`WeekOfYearNumber`** - `1, 2, 3, ... 51, 52`\n\n**`WeekOfYearSuffix`** - `1st, 2nd, 3rd, ... 51st, 52nd`\n\n**`WeekOfYearFixed`** - `01, 02, 03, ... 51, 52`\n\n---\n\n\n## AM / PM\n\n**`AmPmUppercase`** - `AM, PM`\n\n**`AmPmLowercase`** - `am, pm`\n\n---\n\n\n## Hour\n\n**`HourMilitaryNumber`** - `0, 1, 2, ... 22, 23`\n\n**`HourMilitaryFixed`** - `00, 01, 02, ... 22, 23`\n\n**`HourNumber`** - `0, 1, 2, ... 11, 12`\n\n**`HourFixed`** - `00, 01, 02, ... 11, 12`\n\n**`HourMilitaryFromOneNumber`** - `1, 2, ... 23, 24`\n\n**`HourMilitaryFromOneFixed`** - `01, 02, ... 23, 24`\n\n---\n\n\n## Minute\n\n**`MinuteNumber`** - `0, 1, 2, ... 58, 59`\n\n**`MinuteFixed`** - `00, 01, 02, ... 58, 59`\n\n---\n\n\n## Second\n\n**`SecondNumber`** - `0, 1, 2, ... 58, 59`\n\n**`SecondFixed`** - `00, 01, 02, ... 58, 59`\n\n",
+        "comment": " These are the available tokens to help you format dates.\n",
         "args": [],
-        "cases": [
-          [
-            "MonthNumber",
-            []
-          ],
-          [
-            "MonthSuffix",
-            []
-          ],
-          [
-            "MonthFixed",
-            []
-          ],
-          [
-            "MonthNameFirstThree",
-            []
-          ],
-          [
-            "MonthNameFull",
-            []
-          ],
-          [
-            "DayOfMonthNumber",
-            []
-          ],
-          [
-            "DayOfMonthSuffix",
-            []
-          ],
-          [
-            "DayOfMonthFixed",
-            []
-          ],
-          [
-            "DayOfYearNumber",
-            []
-          ],
-          [
-            "DayOfYearSuffix",
-            []
-          ],
-          [
-            "DayOfYearFixed",
-            []
-          ],
-          [
-            "DayOfWeekNumber",
-            []
-          ],
-          [
-            "DayOfWeekSuffix",
-            []
-          ],
-          [
-            "DayOfWeekNameFirstTwo",
-            []
-          ],
-          [
-            "DayOfWeekNameFirstThree",
-            []
-          ],
-          [
-            "DayOfWeekNameFull",
-            []
-          ],
-          [
-            "YearNumberLastTwo",
-            []
-          ],
-          [
-            "YearNumberCapped",
-            []
-          ],
-          [
-            "YearNumber",
-            []
-          ],
-          [
-            "QuarterNumber",
-            []
-          ],
-          [
-            "QuarterSuffix",
-            []
-          ],
-          [
-            "WeekOfYearNumber",
-            []
-          ],
-          [
-            "WeekOfYearSuffix",
-            []
-          ],
-          [
-            "WeekOfYearFixed",
-            []
-          ],
-          [
-            "AmPmUppercase",
-            []
-          ],
-          [
-            "AmPmLowercase",
-            []
-          ],
-          [
-            "HourMilitaryNumber",
-            []
-          ],
-          [
-            "HourMilitaryFixed",
-            []
-          ],
-          [
-            "HourNumber",
-            []
-          ],
-          [
-            "HourFixed",
-            []
-          ],
-          [
-            "HourMilitaryFromOneNumber",
-            []
-          ],
-          [
-            "HourMilitaryFromOneFixed",
-            []
-          ],
-          [
-            "MinuteNumber",
-            []
-          ],
-          [
-            "MinuteFixed",
-            []
-          ],
-          [
-            "SecondNumber",
-            []
-          ],
-          [
-            "SecondFixed",
-            []
-          ],
-          [
-            "Text",
-            [
-              "String"
-            ]
-          ]
-        ]
+        "cases": []
       }
     ],
     "values": [
       {
+        "name": "amPmLowercase",
+        "comment": " Get the AM / PM value of the hour, in uppercase.\n\nExamples: `am, pm`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "amPmUppercase",
+        "comment": " Get the AM / PM value of the hour, in uppercase.\n\nExamples: `AM, PM`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "dayOfMonthFixed",
+        "comment": " Get the numeric value of the day of the month, fixed to two places.\n\nExamples: `01, 02, 03, ... 30, 31`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "dayOfMonthNumber",
+        "comment": " Get the numeric value of the day of the month.\n\nExamples: `1, 2, 3, ... 30, 31`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "dayOfMonthSuffix",
+        "comment": " Get the numeric value of the day of the month, with a suffix at the end.\n\nExamples: `1st, 2nd, 3rd, ... 30th, 31st`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "dayOfWeekNameFirstThree",
+        "comment": " Gets the name of the day of the week, but just the first three letters.\n\nExamples: `Sun, Mon, Tue, ... Fri, Sat`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "dayOfWeekNameFirstTwo",
+        "comment": " Gets the name of the day of the week, but just the first two letters.\n\nExamples: `Su, Mo, Tue, ... Fr, Sa`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "dayOfWeekNameFull",
+        "comment": " Gets the full name of the day of the week.\n\nExamples: `Sunday, Monday, ... Friday, Saturday`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "dayOfWeekNumber",
+        "comment": " Get the numeric value of the day of the week.\n\nExamples: `0, 1, 2, ... 5, 6`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "dayOfWeekSuffix",
+        "comment": " Get the numeric value of the day of the week, with a suffix at the end.\n\nExamples: `0th, 1st, 2nd, ... 5th, 6th`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "dayOfYearFixed",
+        "comment": " Get the numeric value of the day of the year.\n\nExamples: `001, 002, 003, ... 364, 365`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "dayOfYearNumber",
+        "comment": " Get the numeric value of the day of the year.\n\nExamples: `1, 2, 3, ... 364, 365`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "dayOfYearSuffix",
+        "comment": " Get the numeric value of the day of the year, with a suffix at the end.\n\nExamples: `1st, 2nd, 3rd, ... 364th, 365th`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
         "name": "format",
-        "comment": " This function takes in a list of tokens and a date to create your formatted string!\n\nLet's say `someDate` is on November 15, 1993 at 15:06.\n\n    -- \"15:06\"\n    format\n        [ HourMilitaryFixed\n        , Text \":\"\n        , MinuteFixed\n        ]\n        someDate\n\n    -- \"3:06 pm\"\n    format\n        [ HourNumber\n        , Text \":\"\n        , MinuteFixed\n        , Text \" \"\n        , AmPmLowercase\n        ]\n        someDate\n\n    -- \"Nov 15th, 1993\"\n    format\n        [ MonthNameFirstThree\n        , Text \" \"\n        , DayOfMonthSuffix\n        , Text \", \"\n        , YearNumber\n        ]\n        someDate\n\n",
+        "comment": " This function takes in a list of tokens and a date to create your formatted string!\n\nLet's say `someDate` is on November 15, 1993 at 15:06.\n\n    -- \"15:06\"\n    format\n        [ hourMilitaryFixed\n        , text \":\"\n        , minuteFixed\n        ]\n        someDate\n\n    -- \"3:06 pm\"\n    format\n        [ hourNumber\n        , text \":\"\n        , minuteFixed\n        , text \" \"\n        , amPmLowercase\n        ]\n        someDate\n\n    -- \"Nov 15th, 1993\"\n    format\n        [ monthNameFirstThree\n        , text \" \"\n        , dayOfMonthSuffix\n        , text \", \"\n        , yearNumber\n        ]\n        someDate\n\n",
         "type": "List DateFormat.Token -> Date.Date -> String"
+      },
+      {
+        "name": "hourFixed",
+        "comment": " Get the hour of the 12-hour day, fixed to two places.\n\nExamples: `00, 01, 02, ... 11, 12`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "hourMilitaryFixed",
+        "comment": " Get the hour of the 24-hour day, fixed to two places.\n\nExamples: `00, 01, 02, ... 22, 23`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "hourMilitaryFromOneFixed",
+        "comment": " Get the hour of the 24-hour day, starting from one, fixed to two places.\n\nExamples: `01, 02, ... 23, 24`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "hourMilitaryFromOneNumber",
+        "comment": " Get the hour of the 24-hour day, starting from one.\n\nExamples: `1, 2, ... 23, 24`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "hourMilitaryNumber",
+        "comment": " Get the hour of the 24-hour day.\n\nExamples: `0, 1, 2, ... 22, 23`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "hourNumber",
+        "comment": " Get the hour of the 12-hour day.\n\nExamples: `0, 1, 2, ... 11, 12`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "minuteFixed",
+        "comment": " Get the minute of the hour, fixed to two places.\n\nExamples: `00, 01, 02, ... 58, 59`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "minuteNumber",
+        "comment": " Get the minute of the hour.\n\nExamples: `0, 1, 2, ... 58, 59`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "monthFixed",
+        "comment": " Get the numeric value of the month, fixed to two places.\n\nExamples: `01, 02, 03, ... 11, 12`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "monthNameFirstThree",
+        "comment": " Get the name of the month, but just the first three letters.\n\nExamples: `Jan, Feb, Mar, ... Nov, Dec`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "monthNameFull",
+        "comment": " Get the full name of the month.\n\nExamples: `January, February, ... December`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "monthNumber",
+        "comment": " Get the numeric value of the month.\n\nExamples: `1, 2, 3, ... 11, 12`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "monthSuffix",
+        "comment": " Get the numeric value of the month, with a suffix at the end.\n\nExamples: `1st, 2nd, 3rd, ... 11th, 12th`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "quarterNumber",
+        "comment": " Get the numeric value for the quarter of the year, with a suffix.\n\nExamples: `1, 2, 3, 4`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "quarterSuffix",
+        "comment": " Get the numeric value for the quarter of the year, with a suffix.\n\nExamples: `1st, 2nd, 3rd, 4th`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "secondFixed",
+        "comment": " Get the second of the minute, fixed to two places.\n\nExamples: `00, 01, 02, ... 58, 59`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "secondNumber",
+        "comment": " Get the second of the minute.\n\nExamples: `0, 1, 2, ... 58, 59`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "text",
+        "comment": " Represent a string value\n\n    formatter : Date -> String\n    formatter =\n        DateFormat.format\n            [ DateFormat.hourMilitaryFixed\n            , DateFormat.text \":\"\n            , DateFormat.minuteFixed\n            ]\n\nCould be given a date to return something like `\"23:15\"` or `\"04:43\"`\n\n",
+        "type": "String -> DateFormat.Token"
+      },
+      {
+        "name": "weekOfYearFixed",
+        "comment": " Get the numeric value for the week of the year, fixed to two places.\n\nExamples: `01, 02, 03, ... 51, 52`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "weekOfYearNumber",
+        "comment": " Get the numeric value for the week of the year.\n\nExamples: `1, 2, 3, ... 51, 52`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "weekOfYearSuffix",
+        "comment": " Get the numeric value for the week of the year, with a suffix at the end.\n\nExamples: `1st, 2nd, 3rd, ... 51st, 52nd`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "yearNumber",
+        "comment": " Get the year, upwards of 10,000.\n\nExamples: `70, 71, ... 9999, ...`\n\n",
+        "type": "DateFormat.Token"
+      },
+      {
+        "name": "yearNumberLastTwo",
+        "comment": " Get the year, but just the last two letters.\n\nExamples: `70, 71, ... 29, 30`\n\n",
+        "type": "DateFormat.Token"
       }
     ],
     "generated-with-elm-version": "0.18.0"
