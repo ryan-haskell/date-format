@@ -1,6 +1,8 @@
 # elm-date-format
 > A reliable way to format dates with Elm.
 
+[![Build Status](https://travis-ci.org/RyanNHG/elm-date-format.svg?branch=master)](https://travis-ci.org/RyanNHG/elm-date-format)
+
 ### Using the [elm package](http://package.elm-lang.org/packages/ryannhg/elm-date-format/latest)
 
 ```
@@ -22,7 +24,7 @@ No need to remember the difference between `mm` and `MM` and `M`!
 ### A quick example
 
 ```elm
-import Date
+import Date exposing (Date)
 import DateFormat
 
 
@@ -31,11 +33,11 @@ import DateFormat
 yourFormatter : Date -> String
 yourFormatter =
     DateFormat.format
-        [ DateFormat.MonthNameFull
-        , DateFormat.Text " "
-        , DateFormat.DayOfMonthSuffix
-        , DateFormat.Text ", "
-        , DateFormat.YearNumber
+        [ DateFormat.monthNameFull
+        , DateFormat.text " "
+        , DateFormat.dayOfMonthSuffix
+        , DateFormat.text ", "
+        , DateFormat.yearNumber
         ]
 
 
@@ -43,7 +45,7 @@ yourFormatter =
 
 yourPrettyDate : String
 yourPrettyDate =
-    case Date.fromString "2018-02-05T00:00:00.000Z" of
+    case Date.fromString "2018-02-05T00:00:00.000" of
         Ok date ->
             yourFormatter date
 
