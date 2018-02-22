@@ -64,7 +64,7 @@
       },
       {
         "name": "dayOfYearFixed",
-        "comment": " Get the numeric value of the day of the year.\n\nExamples: `001, 002, 003, ... 364, 365`\n\n",
+        "comment": " Get the numeric value of the day of the year, fixed to three places.\n\nExamples: `001, 002, 003, ... 364, 365`\n\n",
         "type": "DateFormat.Token"
       },
       {

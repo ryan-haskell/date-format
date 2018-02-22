@@ -217,7 +217,7 @@ dayOfYearSuffix =
     DayOfYearSuffix
 
 
-{-| Get the numeric value of the day of the year.
+{-| Get the numeric value of the day of the year, fixed to three places.
 
 Examples: `001, 002, 003, ... 364, 365`
 
