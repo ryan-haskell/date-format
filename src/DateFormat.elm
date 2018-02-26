@@ -287,9 +287,9 @@ yearNumberLastTwo =
     YearNumberLastTwo
 
 
-{-| Get the year, upwards of 10,000.
+{-| Get the year.
 
-Examples: `70, 71, ... 9999, ...`
+Examples: `1970, 1971, ... 2018, ... 9999, ...`
 
 -}
 yearNumber : Token
