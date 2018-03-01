@@ -812,7 +812,7 @@ daysInMonth year month =
             31
 
         Feb ->
-            if year % 4 == 0 then
+            if isLeapYear year then
                 29
             else
                 28
@@ -846,6 +846,18 @@ daysInMonth year month =
 
         Dec ->
             31
+
+
+isLeapYear : Int -> Bool
+isLeapYear year =
+    if year % 4 /= 0 then
+        False
+    else if year % 100 /= 0 then
+        True
+    else if year % 400 /= 0 then
+        False
+    else
+        True
 
 
 
