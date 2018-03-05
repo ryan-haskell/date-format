@@ -610,7 +610,7 @@ piece date token =
 
         MonthFixed ->
             monthNumber_ date
-                |> toFixedLength
+                |> toFixedLength 2
 
         MonthNameFirst num ->
             fullMonthName date
@@ -621,10 +621,12 @@ piece date token =
 
         QuarterNumber ->
             quarter date
+                |> (+) 1
                 |> toString
 
         QuarterSuffix ->
             quarter date
+                |> (+) 1
                 |> toSuffix
 
         DayOfMonthNumber ->
@@ -637,7 +639,7 @@ piece date token =
 
         DayOfMonthFixed ->
             dayOfMonth date
-                |> toFixedLength
+                |> toFixedLength 2
 
         DayOfYearNumber ->
             dayOfYear date
@@ -649,7 +651,7 @@ piece date token =
 
         DayOfYearFixed ->
             dayOfYear date
-                |> toFixedLength
+                |> toFixedLength 3
 
         DayOfWeekNumber ->
             dayOfWeek date
@@ -676,7 +678,7 @@ piece date token =
 
         WeekOfYearFixed ->
             weekOfYear date
-                |> toFixedLength
+                |> toFixedLength 2
 
         YearNumberLastTwo ->
             year date
@@ -699,7 +701,7 @@ piece date token =
 
         HourMilitaryFixed ->
             Date.hour date
-                |> toFixedLength
+                |> toFixedLength 2
 
         HourNumber ->
             Date.hour date
@@ -709,7 +711,7 @@ piece date token =
         HourFixed ->
             Date.hour date
                 |> toNonMilitary
-                |> toFixedLength
+                |> toFixedLength 2
 
         HourMilitaryFromOneNumber ->
             Date.hour date
@@ -719,7 +721,7 @@ piece date token =
         HourMilitaryFromOneFixed ->
             Date.hour date
                 |> (+) 1
-                |> toFixedLength
+                |> toFixedLength 2
 
         MinuteNumber ->
             Date.minute date
@@ -727,7 +729,7 @@ piece date token =
 
         MinuteFixed ->
             Date.minute date
-                |> toFixedLength
+                |> toFixedLength 2
 
         SecondNumber ->
             Date.second date
@@ -735,7 +737,7 @@ piece date token =
 
         SecondFixed ->
             Date.second date
-                |> toFixedLength
+                |> toFixedLength 2
 
         Text string ->
             string
@@ -1007,7 +1009,7 @@ toNonMilitary : Int -> Int
 toNonMilitary num =
     if num == 0 then
         12
-    else if num < 12 then
+    else if num <= 12 then
         num
     else
         num - 12
@@ -1017,12 +1019,21 @@ toNonMilitary num =
 -- GENERIC
 
 
-toFixedLength : Int -> String
-toFixedLength num =
-    if num < 10 then
-        "0" ++ (toString num)
-    else
-        toString num
+toFixedLength : Int -> Int -> String
+toFixedLength totalChars num =
+    let
+        numStr =
+            (toString num)
+
+        numZerosNeeded =
+            totalChars - String.length numStr
+
+        zeros =
+            List.range 1 numZerosNeeded
+                |> List.map (\_ -> "0")
+                |> String.join ""
+    in
+        zeros ++ numStr
 
 
 toSuffix : Int -> String
