@@ -1,5 +1,5 @@
 {
-    "version": "2.1.0",
+    "version": "2.1.1",
     "summary": "A reliable way to format dates with Elm",
     "repository": "https://github.com/ryannhg/elm-date-format.git",
     "license": "BSD3",
