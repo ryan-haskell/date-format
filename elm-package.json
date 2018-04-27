@@ -1,5 +1,5 @@
 {
-    "version": "2.0.2",
+    "version": "2.1.0",
     "summary": "A reliable way to format dates with Elm",
     "repository": "https://github.com/ryannhg/elm-date-format.git",
     "license": "BSD3",
@@ -7,7 +7,8 @@
         "./src"
     ],
     "exposed-modules": [
-        "DateFormat"
+        "DateFormat",
+        "DateFormat.Relative"
     ],
     "dependencies": {
         "elm-lang/core": "5.1.1 <= v < 6.0.0"

@@ -189,13 +189,39 @@
       },
       {
         "name": "yearNumber",
-        "comment": " Get the year, upwards of 10,000.\n\nExamples: `70, 71, ... 9999, ...`\n\n",
+        "comment": " Get the year.\n\nExamples: `1970, 1971, ... 2018, ... 9999, ...`\n\n",
         "type": "DateFormat.Token"
       },
       {
         "name": "yearNumberLastTwo",
         "comment": " Get the year, but just the last two letters.\n\nExamples: `70, 71, ... 29, 30`\n\n",
         "type": "DateFormat.Token"
+      }
+    ],
+    "generated-with-elm-version": "0.18.0"
+  },
+  {
+    "name": "DateFormat.Relative",
+    "comment": " A reliable way to get a pretty message for the relative time difference between two dates.\n\n\n# Getting relative time for two dates\n\n@docs relativeTime, relativeTimeWithOptions, RelativeTimeOptions\n\n",
+    "aliases": [
+      {
+        "name": "RelativeTimeOptions",
+        "comment": " Options for configuring your own relative message formats!\n\nFor example, here is how `someSecondsAgo` is implemented by default:\n\n    defaultSomeSecondsAgo : Int -> String\n    defaultSomeSecondsAgo seconds =\n        if seconds < 30 then\n            \"just now\"\n        else\n            toString seconds ++ \" seconds ago\"\n\nAnd here is how `inSomeHours` might look:\n\n    defaultInSomeHours : Int -> String\n    defaultInSomeHours hours =\n        if hours < 2 then\n            \"in an hour\"\n        else\n            \"in \" ++ toString hours ++ \" hours\"\n\n",
+        "args": [],
+        "type": "{ someSecondsAgo : Int -> String , someMinutesAgo : Int -> String , someHoursAgo : Int -> String , someDaysAgo : Int -> String , someMonthsAgo : Int -> String , someYearsAgo : Int -> String , inSomeSeconds : Int -> String , inSomeMinutes : Int -> String , inSomeHours : Int -> String , inSomeDays : Int -> String , inSomeMonths : Int -> String , inSomeYears : Int -> String }"
+      }
+    ],
+    "types": [],
+    "values": [
+      {
+        "name": "relativeTime",
+        "comment": " This function takes in two dates and returns the relative difference!\n\nThe date inputs are in **chronological order**.\n\nThat way, we see relative messages for both past _and_ upcoming dates!\n\nHere are a few examples to help:\n\n    relativeTime tenSecondsAgo now ==  \"just now\"\n    relativeTime now tenSecondsAgo ==  \"in a few seconds\"\n    relativeTime now tenSecondsInTheFuture ==  \"in a few seconds\"\n    relativeTime fortyThreeMinutesAgo now == \"43 minutes ago\"\n    relativeTime oneHundredDaysAgo now == \"100 days ago\"\n    relativeTime now oneHundredDaysFromNow == \"in 100 days\"\n\n",
+        "type": "Date.Date -> Date.Date -> String"
+      },
+      {
+        "name": "relativeTimeWithOptions",
+        "comment": " Maybe `relativeTime` is too lame. (Or maybe you speak a different language)\n\nWith `relativeTimeWithOptions`, you can provide your own custom messages for each time range.\n\n(That's what `relativeTime` uses under the hood!)\n\nYou can provide a set of your own custom options, and use `relativeTimeWithOptions` instead.\n\n",
+        "type": "DateFormat.Relative.RelativeTimeOptions -> Date.Date -> Date.Date -> String"
       }
     ],
     "generated-with-elm-version": "0.18.0"
