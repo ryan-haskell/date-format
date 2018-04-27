@@ -1,43 +1,43 @@
 module DateFormat
     exposing
         ( Token
-        , monthNumber
-        , monthSuffix
+        , amPmLowercase
+        , amPmUppercase
+        , dayOfMonthFixed
+        , dayOfMonthNumber
+        , dayOfMonthSuffix
+        , dayOfWeekNameFirstThree
+        , dayOfWeekNameFirstTwo
+        , dayOfWeekNameFull
+        , dayOfWeekNumber
+        , dayOfWeekSuffix
+        , dayOfYearFixed
+        , dayOfYearNumber
+        , dayOfYearSuffix
+        , format
+        , hourFixed
+        , hourMilitaryFixed
+        , hourMilitaryFromOneFixed
+        , hourMilitaryFromOneNumber
+        , hourMilitaryNumber
+        , hourNumber
+        , minuteFixed
+        , minuteNumber
         , monthFixed
         , monthNameFirstThree
         , monthNameFull
-        , dayOfMonthNumber
-        , dayOfMonthSuffix
-        , dayOfMonthFixed
-        , dayOfYearNumber
-        , dayOfYearSuffix
-        , dayOfYearFixed
-        , dayOfWeekNumber
-        , dayOfWeekSuffix
-        , dayOfWeekNameFirstTwo
-        , dayOfWeekNameFirstThree
-        , dayOfWeekNameFull
-        , yearNumberLastTwo
-        , yearNumber
+        , monthNumber
+        , monthSuffix
         , quarterNumber
         , quarterSuffix
+        , secondFixed
+        , secondNumber
+        , text
+        , weekOfYearFixed
         , weekOfYearNumber
         , weekOfYearSuffix
-        , weekOfYearFixed
-        , amPmUppercase
-        , amPmLowercase
-        , hourMilitaryNumber
-        , hourMilitaryFixed
-        , hourNumber
-        , hourFixed
-        , hourMilitaryFromOneNumber
-        , hourMilitaryFromOneFixed
-        , minuteNumber
-        , minuteFixed
-        , secondNumber
-        , secondFixed
-        , text
-        , format
+        , yearNumber
+        , yearNumberLastTwo
         )
 
 {-| A reliable way to format dates with elm
@@ -114,7 +114,8 @@ module DateFormat
 
 -}
 
-import Date exposing (Date, Month(..), Day(..))
+import Date exposing (Date, Day(..), Month(..))
+import Time
 
 
 {-| Get the numeric value of the month.
@@ -868,7 +869,7 @@ isLeapYear year =
 
 quarter : Date -> Int
 quarter date =
-    (monthNumber_ date) // 4
+    monthNumber_ date // 4
 
 
 
@@ -889,7 +890,7 @@ dayOfYear date =
     let
         monthsBeforeThisOne : List Month
         monthsBeforeThisOne =
-            List.take ((monthNumber_ date) - 1) months
+            List.take (monthNumber_ date - 1) months
 
         daysBeforeThisMonth : Int
         daysBeforeThisMonth =
@@ -897,7 +898,7 @@ dayOfYear date =
                 |> List.map (daysInMonth (Date.year date))
                 |> List.sum
     in
-        daysBeforeThisMonth + (dayOfMonth date)
+    daysBeforeThisMonth + dayOfMonth date
 
 
 
@@ -965,12 +966,12 @@ weekOfYear date =
         firstDayOffset =
             dayOfWeek firstDay
     in
-        (daysSoFar + firstDayOffset) // 7 + 1
+    (daysSoFar + firstDayOffset) // 7 + 1
 
 
 firstDayOfYear : Date -> Date
 firstDayOfYear date =
-    case Date.fromString <| (toString (Date.year date)) ++ "-01-01T00:00:00.000Z" of
+    case Date.fromString <| toString (Date.year date) ++ "-01-01T00:00:00.000Z" of
         Ok date ->
             date
 
@@ -1023,7 +1024,7 @@ toFixedLength : Int -> Int -> String
 toFixedLength totalChars num =
     let
         numStr =
-            (toString num)
+            toString num
 
         numZerosNeeded =
             totalChars - String.length numStr
@@ -1033,7 +1034,7 @@ toFixedLength totalChars num =
                 |> List.map (\_ -> "0")
                 |> String.join ""
     in
-        zeros ++ numStr
+    zeros ++ numStr
 
 
 toSuffix : Int -> String
@@ -1064,4 +1065,4 @@ toSuffix num =
                         _ ->
                             "th"
     in
-        (toString num) ++ suffix
+    toString num ++ suffix
