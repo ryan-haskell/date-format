@@ -1,9 +1,9 @@
 {
     "type": "package",
-    "name": "ryannhg/elm-date-format",
+    "name": "ryannhg/date-format",
     "summary": "A reliable way to format dates and times with Elm.",
     "license": "BSD-3-Clause",
-    "version": "2.1.1",
+    "version": "3.0.0",
     "exposed-modules": [
         "DateFormat",
         "DateFormat.Relative"
