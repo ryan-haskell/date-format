@@ -1,0 +1,21 @@
+# `date-format` | Examples
+
+### Examples
+
+- __`Basic.elm`__ - An example of formatting a single time.
+
+- __`Relative.elm`__ - An example with relative times.
+
+
+
+### Local Setup
+
+Here's how you can try them out:
+
+1. `git clone https://github.com/ryannhg/date-format`
+
+1. `cd date-format/examples`
+
+1. `elm reactor`
+
+1. Go to [http://localhost:8000](http://localhost:8000)
