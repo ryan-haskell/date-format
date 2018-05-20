@@ -59,24 +59,28 @@ relativeTimeWithOptions options start end =
         time =
             Time.millisToPosix (abs differenceInMilliseconds)
     in
-    relativeTimeWithFunctions utc time <|
-        if differenceInMilliseconds < 0 then
-            RelativeTimeFunctions
-                options.someSecondsAgo
-                options.someMinutesAgo
-                options.someHoursAgo
-                options.someDaysAgo
-                options.someMonthsAgo
-                options.someYearsAgo
+    if differenceInMilliseconds == 0 then
+        options.rightNow
 
-        else
-            RelativeTimeFunctions
-                options.inSomeSeconds
-                options.inSomeMinutes
-                options.inSomeHours
-                options.inSomeDays
-                options.inSomeMonths
-                options.inSomeYears
+    else
+        relativeTimeWithFunctions utc time <|
+            if differenceInMilliseconds < 0 then
+                RelativeTimeFunctions
+                    options.someSecondsAgo
+                    options.someMinutesAgo
+                    options.someHoursAgo
+                    options.someDaysAgo
+                    options.someMonthsAgo
+                    options.someYearsAgo
+
+            else
+                RelativeTimeFunctions
+                    options.inSomeSeconds
+                    options.inSomeMinutes
+                    options.inSomeHours
+                    options.inSomeDays
+                    options.inSomeMonths
+                    options.inSomeYears
 
 
 {-| Options for configuring your own relative message formats!
@@ -109,6 +113,7 @@ type alias RelativeTimeOptions =
     , someDaysAgo : Int -> String
     , someMonthsAgo : Int -> String
     , someYearsAgo : Int -> String
+    , rightNow : String
     , inSomeSeconds : Int -> String
     , inSomeMinutes : Int -> String
     , inSomeHours : Int -> String
@@ -126,6 +131,7 @@ defaultRelativeOptions =
     , someDaysAgo = defaultSomeDaysAgo
     , someMonthsAgo = defaultSomeMonthsAgo
     , someYearsAgo = defaultSomeYearsAgo
+    , rightNow = defaultRightNow
     , inSomeSeconds = defaultInSomeSeconds
     , inSomeMinutes = defaultInSomeMinutes
     , inSomeHours = defaultInSomeHours
@@ -133,11 +139,6 @@ defaultRelativeOptions =
     , inSomeMonths = defaultInSomeMonths
     , inSomeYears = defaultInSomeYears
     }
-
-
-divideBy : Int -> Int -> Float
-divideBy divisor dividend =
-    toFloat dividend / toFloat divisor
 
 
 toMilliseconds : Posix -> Int
@@ -174,6 +175,11 @@ relativeTimeWithFunctions zone posix functions =
 
     else
         functions.years <| (Time.toHour zone posix // 24 // 365)
+
+
+defaultRightNow : String
+defaultRightNow =
+    "right now"
 
 
 defaultSomeSecondsAgo : Int -> String
