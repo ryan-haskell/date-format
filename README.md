@@ -1,22 +1,22 @@
-# elm-date-format
-> A reliable way to format dates with Elm.
+# date-format
+> A reliable way to format dates and times with Elm.
 
 [![Build Status](https://travis-ci.org/ryannhg/elm-date-format.svg?branch=master)](https://travis-ci.org/ryannhg/elm-date-format)
 
-### Using the [elm package](http://package.elm-lang.org/packages/ryannhg/elm-date-format/latest)
+### Using the [elm package](http://package.elm-lang.org/packages/ryannhg/date-format/latest)
 
 ```
-elm package install ryannhg/elm-date-format
+elm package install ryannhg/date-format
 ```
 
 
-### What is `elm-date-format`?
+### What is `date-format`?
 
 If you're coming from Javascript, you might have heard of [MomentJS](https://momentjs.com).
 
 MomentJS is a great library for formatting dates!
 
-`elm-date-format` has the same [formatting options](https://momentjs.com/docs/#/displaying/format/) as Moment, but uses Elm's awesome type system to provide human readable names, and catch typos for you at compile time!
+`date-format` has similar [formatting options](https://momentjs.com/docs/#/displaying/format/) as Moment, but uses Elm's awesome type system to provide human readable names, and catch typos for you at compile time!
 
 No need to remember the difference between `mm` and `MM` and `M`!
 
@@ -24,14 +24,14 @@ No need to remember the difference between `mm` and `MM` and `M`!
 ### A quick example
 
 ```elm
-import Date exposing (Date)
 import DateFormat
+import Time exposing (Zone, Posix)
 
 
--- Create a custom formatter
+-- Let's create a custom formatter we can use later:
 
-yourFormatter : Date -> String
-yourFormatter =
+ourFormatter : Zone -> Prefix -> String
+ourFormatter =
     DateFormat.format
         [ DateFormat.monthNameFull
         , DateFormat.text " "
@@ -41,21 +41,26 @@ yourFormatter =
         ]
 
 
--- Using your formatter, format your date as a string!
+-- With our formatter, we can format any date as a string!
 
-yourPrettyDate : String
-yourPrettyDate =
-    case Date.fromString "2018-02-05T00:00:00.000" of
-        Ok date ->
-            yourFormatter date
+ourTimezone : Zone
+ourTimezone =
+    utc
 
-        Err ->
-            "This shouldn't happen..."
+-- 2018-05-20T19:18:24.911Z
+ourPosixTime : Posix
+ourPosixTime =
+    Time.millisToPosix 1526843861289
+
+
+ourPrettyDate : String
+ourPrettyDate =
+    ourFormatter ourTimezone ourPosixTime
 
 ```
 
-Would make `yourPrettyDate` return:
+Would make `ourPrettyDate` return:
 
 ```
-"February 5th, 2018" : String
+"May 20th, 2018" : String
 ```

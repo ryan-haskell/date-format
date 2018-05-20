@@ -114,8 +114,7 @@ module DateFormat
 
 -}
 
-import Date exposing (Date, Day(..), Month(..))
-import Time
+import Time exposing (Month(..), Posix, Weekday(..), Zone)
 
 
 {-| Get the numeric value of the month.
@@ -470,7 +469,7 @@ secondFixed =
 
 {-| Represent a string value
 
-    formatter : Date -> String
+    formatter : Zone -> Posix -> String
     formatter =
         DateFormat.format
             [ DateFormat.hourMilitaryFixed
@@ -478,7 +477,7 @@ secondFixed =
             , DateFormat.minuteFixed
             ]
 
-Could be given a date to return something like `"23:15"` or `"04:43"`
+When given a [`Zone`](/packages/elm-lang/time/latest/Time#Zone) and [`Posix`](/packages/elm-lang/time/latest/Time#Posix), this will return something like `"23:15"` or `"04:43"`
 
 -}
 text : String -> Token
@@ -526,9 +525,9 @@ type Token
     | Text String
 
 
-{-| This function takes in a list of tokens and a date to create your formatted string!
+{-| This function takes in a list of tokens, [`Zone`](/packages/elm-lang/time/latest/Time#Zone), and [`Posix`](/packages/elm-lang/time/latest/Time#Posix) to create your formatted string!
 
-Let's say `someDate` is on November 15, 1993 at 15:06.
+Let's say `ourPosixValue` is November 15, 1993 at 15:06.
 
     -- "15:06"
     format
@@ -536,7 +535,8 @@ Let's say `someDate` is on November 15, 1993 at 15:06.
         , text ":"
         , minuteFixed
         ]
-        someDate
+        utc
+        ourPosixValue
 
     -- "3:06 pm"
     format
@@ -546,7 +546,8 @@ Let's say `someDate` is on November 15, 1993 at 15:06.
         , text " "
         , amPmLowercase
         ]
-        someDate
+        utc
+        ourPosixValue
 
     -- "Nov 15th, 1993"
     format
@@ -556,13 +557,14 @@ Let's say `someDate` is on November 15, 1993 at 15:06.
         , text ", "
         , yearNumber
         ]
-        someDate
+        utc
+        ourPosixValue
 
 -}
-format : List Token -> Date -> String
-format tokens date =
+format : List Token -> Zone -> Posix -> String
+format tokens zone time =
     tokens
-        |> List.map (piece date)
+        |> List.map (piece zone time)
         |> String.join ""
 
 
@@ -584,9 +586,9 @@ months =
     ]
 
 
-{-| Days of the week, in the correct order.
+{-| Days of the week, starting with Sunday.
 -}
-days : List Day
+days : List Weekday
 days =
     [ Sun
     , Mon
@@ -598,146 +600,146 @@ days =
     ]
 
 
-piece : Date -> Token -> String
-piece date token =
+piece : Zone -> Posix -> Token -> String
+piece zone posix token =
     case token of
         MonthNumber ->
-            monthNumber_ date
-                |> toString
+            monthNumber_ zone posix
+                |> String.fromInt
 
         MonthSuffix ->
-            monthNumber_ date
+            monthNumber_ zone posix
                 |> toSuffix
 
         MonthFixed ->
-            monthNumber_ date
+            monthNumber_ zone posix
                 |> toFixedLength 2
 
         MonthNameFirst num ->
-            fullMonthName date
+            fullMonthName zone posix
                 |> String.left num
 
         MonthNameFull ->
-            fullMonthName date
+            fullMonthName zone posix
 
         QuarterNumber ->
-            quarter date
+            quarter zone posix
                 |> (+) 1
-                |> toString
+                |> String.fromInt
 
         QuarterSuffix ->
-            quarter date
+            quarter zone posix
                 |> (+) 1
                 |> toSuffix
 
         DayOfMonthNumber ->
-            dayOfMonth date
-                |> toString
+            dayOfMonth zone posix
+                |> String.fromInt
 
         DayOfMonthSuffix ->
-            dayOfMonth date
+            dayOfMonth zone posix
                 |> toSuffix
 
         DayOfMonthFixed ->
-            dayOfMonth date
+            dayOfMonth zone posix
                 |> toFixedLength 2
 
         DayOfYearNumber ->
-            dayOfYear date
-                |> toString
+            dayOfYear zone posix
+                |> String.fromInt
 
         DayOfYearSuffix ->
-            dayOfYear date
+            dayOfYear zone posix
                 |> toSuffix
 
         DayOfYearFixed ->
-            dayOfYear date
+            dayOfYear zone posix
                 |> toFixedLength 3
 
         DayOfWeekNumber ->
-            dayOfWeek date
-                |> toString
+            dayOfWeek zone posix
+                |> String.fromInt
 
         DayOfWeekSuffix ->
-            dayOfWeek date
+            dayOfWeek zone posix
                 |> toSuffix
 
         DayOfWeekNameFirst num ->
-            dayOfWeekName date
+            dayOfWeekName zone posix
                 |> String.left num
 
         DayOfWeekNameFull ->
-            dayOfWeekName date
+            dayOfWeekName zone posix
 
         WeekOfYearNumber ->
-            weekOfYear date
-                |> toString
+            weekOfYear zone posix
+                |> String.fromInt
 
         WeekOfYearSuffix ->
-            weekOfYear date
+            weekOfYear zone posix
                 |> toSuffix
 
         WeekOfYearFixed ->
-            weekOfYear date
+            weekOfYear zone posix
                 |> toFixedLength 2
 
         YearNumberLastTwo ->
-            year date
+            year zone posix
                 |> String.right 2
 
         YearNumber ->
-            year date
+            year zone posix
 
         AmPmUppercase ->
-            amPm date
+            amPm zone posix
                 |> String.toUpper
 
         AmPmLowercase ->
-            amPm date
+            amPm zone posix
                 |> String.toLower
 
         HourMilitaryNumber ->
-            Date.hour date
-                |> toString
+            Time.toHour zone posix
+                |> String.fromInt
 
         HourMilitaryFixed ->
-            Date.hour date
+            Time.toHour zone posix
                 |> toFixedLength 2
 
         HourNumber ->
-            Date.hour date
+            Time.toHour zone posix
                 |> toNonMilitary
-                |> toString
+                |> String.fromInt
 
         HourFixed ->
-            Date.hour date
+            Time.toHour zone posix
                 |> toNonMilitary
                 |> toFixedLength 2
 
         HourMilitaryFromOneNumber ->
-            Date.hour date
+            Time.toHour zone posix
                 |> (+) 1
-                |> toString
+                |> String.fromInt
 
         HourMilitaryFromOneFixed ->
-            Date.hour date
+            Time.toHour zone posix
                 |> (+) 1
                 |> toFixedLength 2
 
         MinuteNumber ->
-            Date.minute date
-                |> toString
+            Time.toMinute zone posix
+                |> String.fromInt
 
         MinuteFixed ->
-            Date.minute date
+            Time.toMinute zone posix
                 |> toFixedLength 2
 
         SecondNumber ->
-            Date.second date
-                |> toString
+            Time.toSecond zone posix
+                |> String.fromInt
 
         SecondFixed ->
-            Date.second date
+            Time.toSecond zone posix
                 |> toFixedLength 2
 
         Text string ->
@@ -745,32 +747,28 @@ piece date token =
 
 
 
--- | FractionalSecond Int
--- | UnixTimestamp
--- | UnixMillisecondTimestamp
--- | PlainText String
 -- MONTHS
 
 
-monthPair : Date -> ( Int, Month )
-monthPair date =
+monthPair : Zone -> Posix -> ( Int, Month )
+monthPair zone posix =
     months
-        |> List.indexedMap (,)
-        |> List.filter (\( i, m ) -> m == Date.month date)
+        |> List.indexedMap (\a b -> ( a, b ))
+        |> List.filter (\( i, m ) -> m == Time.toMonth zone posix)
         |> List.head
         |> Maybe.withDefault ( 0, Jan )
 
 
-monthNumber_ : Date -> Int
-monthNumber_ date =
-    monthPair date
+monthNumber_ : Zone -> Posix -> Int
+monthNumber_ zone posix =
+    monthPair zone posix
         |> (\( i, m ) -> i)
         |> (+) 1
 
 
-fullMonthName : Date -> String
-fullMonthName date =
-    case Date.month date of
+fullMonthName : Zone -> Posix -> String
+fullMonthName zone posix =
+    case Time.toMonth zone posix of
         Jan ->
             "January"
 
@@ -809,14 +807,15 @@ fullMonthName date =
 
 
 daysInMonth : Int -> Month -> Int
-daysInMonth year month =
+daysInMonth year_ month =
     case month of
         Jan ->
             31
 
         Feb ->
-            if isLeapYear year then
+            if isLeapYear year_ then
                 29
+
             else
                 28
 
@@ -852,13 +851,16 @@ daysInMonth year month =
 
 
 isLeapYear : Int -> Bool
-isLeapYear year =
-    if year % 4 /= 0 then
+isLeapYear year_ =
+    if modBy 4 year_ /= 0 then
         False
-    else if year % 100 /= 0 then
+
+    else if modBy 100 year_ /= 0 then
         True
-    else if year % 400 /= 0 then
+
+    else if modBy 400 year_ /= 0 then
         False
+
     else
         True
 
@@ -867,57 +869,57 @@ isLeapYear year =
 -- QUARTERS
 
 
-quarter : Date -> Int
-quarter date =
-    monthNumber_ date // 4
+quarter : Zone -> Posix -> Int
+quarter zone posix =
+    monthNumber_ zone posix // 4
 
 
 
 -- DAY OF MONTH
 
 
-dayOfMonth : Date -> Int
+dayOfMonth : Zone -> Posix -> Int
 dayOfMonth =
-    Date.day
+    Time.toDay
 
 
 
 -- DAY OF YEAR
 
 
-dayOfYear : Date -> Int
-dayOfYear date =
+dayOfYear : Zone -> Posix -> Int
+dayOfYear zone posix =
     let
         monthsBeforeThisOne : List Month
         monthsBeforeThisOne =
-            List.take (monthNumber_ date - 1) months
+            List.take (monthNumber_ zone posix - 1) months
 
         daysBeforeThisMonth : Int
         daysBeforeThisMonth =
             monthsBeforeThisOne
-                |> List.map (daysInMonth (Date.year date))
+                |> List.map (daysInMonth (Time.toYear zone posix))
                 |> List.sum
     in
-    daysBeforeThisMonth + dayOfMonth date
+    daysBeforeThisMonth + dayOfMonth zone posix
 
 
 
 -- DAY OF WEEK
 
 
-dayOfWeek : Date -> Int
-dayOfWeek date =
+dayOfWeek : Zone -> Posix -> Int
+dayOfWeek zone posix =
     days
-        |> List.indexedMap (,)
-        |> List.filter (\( _, d ) -> d == Date.dayOfWeek date)
+        |> List.indexedMap (\i day -> ( i, day ))
+        |> List.filter (\( _, day ) -> day == Time.toWeekday zone posix)
         |> List.head
         |> Maybe.withDefault ( 0, Sun )
-        |> (\( i, d ) -> i)
+        |> (\( i, _ ) -> i)
 
 
-dayOfWeekName : Date -> String
-dayOfWeekName date =
-    case Date.dayOfWeek date of
+dayOfWeekName : Zone -> Posix -> String
+dayOfWeekName zone posix =
+    case Time.toWeekday zone posix of
         Mon ->
             "Monday"
 
@@ -951,53 +953,57 @@ type alias SimpleDate =
     }
 
 
-weekOfYear : Date -> Int
-weekOfYear date =
+weekOfYear : Zone -> Posix -> Int
+weekOfYear zone posix =
     let
         daysSoFar : Int
         daysSoFar =
-            dayOfYear date
+            dayOfYear zone posix
 
-        firstDay : Date
+        firstDay : Posix
         firstDay =
-            firstDayOfYear date
+            firstDayOfYear zone posix
 
         firstDayOffset : Int
         firstDayOffset =
-            dayOfWeek firstDay
+            dayOfWeek zone firstDay
     in
     (daysSoFar + firstDayOffset) // 7 + 1
 
 
-firstDayOfYear : Date -> Date
-firstDayOfYear date =
-    case Date.fromString <| toString (Date.year date) ++ "-01-01T00:00:00.000Z" of
-        Ok date ->
-            date
+millisecondsPerYear : Int
+millisecondsPerYear =
+    round (1000 * 60 * 60 * 24 * 365.25)
 
-        Err _ ->
-            date
+
+firstDayOfYear : Zone -> Posix -> Posix
+firstDayOfYear zone time =
+    time
+        |> Time.toYear zone
+        |> (*) millisecondsPerYear
+        |> Time.millisToPosix
 
 
 
 -- YEAR
 
 
-year : Date -> String
-year date =
-    date
-        |> Date.year
-        |> toString
+year : Zone -> Posix -> String
+year zone time =
+    time
+        |> Time.toYear zone
+        |> String.fromInt
 
 
 
 -- AM / PM
 
 
-amPm : Date -> String
-amPm date =
-    if Date.hour date > 11 then
+amPm : Zone -> Posix -> String
+amPm zone posix =
+    if Time.toHour zone posix > 11 then
         "pm"
+
     else
         "am"
 
@@ -1010,8 +1016,10 @@ toNonMilitary : Int -> Int
 toNonMilitary num =
     if num == 0 then
         12
+
     else if num <= 12 then
         num
+
     else
         num - 12
 
@@ -1024,7 +1032,7 @@ toFixedLength : Int -> Int -> String
 toFixedLength totalChars num =
     let
         numStr =
-            toString num
+            String.fromInt num
 
         numZerosNeeded =
             totalChars - String.length numStr
@@ -1052,7 +1060,7 @@ toSuffix num =
                     "th"
 
                 _ ->
-                    case num % 10 of
+                    case modBy 10 num of
                         1 ->
                             "st"
 
@@ -1065,4 +1073,4 @@ toSuffix num =
                         _ ->
                             "th"
     in
-    toString num ++ suffix
+    String.fromInt num ++ suffix

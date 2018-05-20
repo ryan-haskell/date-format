@@ -14,8 +14,7 @@ module DateFormat.Relative
 
 -}
 
-import Date exposing (Date)
-import Time exposing (Time)
+import Time exposing (Month(..), Posix, Weekday(..), Zone, utc)
 
 
 {-| This function takes in two dates and returns the relative difference!
@@ -39,7 +38,7 @@ Here are a few examples to help:
     relativeTime now tenSecondsAgo ==  "in a few seconds"
 
 -}
-relativeTime : Date -> Date -> String
+relativeTime : Posix -> Posix -> String
 relativeTime =
     relativeTimeWithOptions defaultRelativeOptions
 
@@ -53,18 +52,18 @@ With `relativeTimeWithOptions`, you can provide your own custom messages for eac
 You can provide a set of your own custom options, and use `relativeTimeWithOptions` instead.
 
 -}
-relativeTimeWithOptions : RelativeTimeOptions -> Date -> Date -> String
+relativeTimeWithOptions : RelativeTimeOptions -> Posix -> Posix -> String
 relativeTimeWithOptions options start end =
     let
         differenceInSeconds : Float
         differenceInSeconds =
             toSeconds end - toSeconds start
 
-        time : Time
+        time : Posix
         time =
-            Time.second * abs differenceInSeconds
+            Time.millisToPosix (round <| abs differenceInSeconds)
     in
-    relativeTimeWithFunctions time <|
+    relativeTimeWithFunctions utc time <|
         if differenceInSeconds < 0 then
             RelativeTimeFunctions
                 options.someSecondsAgo
@@ -73,6 +72,7 @@ relativeTimeWithOptions options start end =
                 options.someDaysAgo
                 options.someMonthsAgo
                 options.someYearsAgo
+
         else
             RelativeTimeFunctions
                 options.inSomeSeconds
@@ -91,6 +91,7 @@ For example, here is how `someSecondsAgo` is implemented by default:
     defaultSomeSecondsAgo seconds =
         if seconds < 30 then
             "just now"
+
         else
             toString seconds ++ " seconds ago"
 
@@ -100,6 +101,7 @@ And here is how `inSomeHours` might look:
     defaultInSomeHours hours =
         if hours < 2 then
             "in an hour"
+
         else
             "in " ++ toString hours ++ " hours"
 
@@ -137,11 +139,15 @@ defaultRelativeOptions =
     }
 
 
-toSeconds : Date -> Float
-toSeconds date =
-    date
-        |> Date.toTime
-        |> Time.inSeconds
+divideBy : Int -> Int -> Float
+divideBy divisor dividend =
+    toFloat dividend / toFloat divisor
+
+
+toSeconds : Posix -> Float
+toSeconds =
+    Time.posixToMillis
+        >> divideBy 1000
 
 
 type alias RelativeTimeFunctions =
@@ -154,113 +160,130 @@ type alias RelativeTimeFunctions =
     }
 
 
-relativeTimeWithFunctions : Time -> RelativeTimeFunctions -> String
-relativeTimeWithFunctions time functions =
-    if Time.inMinutes time < 1 then
-        functions.seconds <| floor (Time.inSeconds time)
-    else if Time.inHours time < 1 then
-        functions.minutes <| floor (Time.inMinutes time)
-    else if Time.inHours time < 24 then
-        functions.hours <| floor (Time.inHours time / 1)
-    else if Time.inHours time < 24 * 30 then
-        functions.days <| floor (Time.inHours time / 24)
-    else if Time.inHours time < 24 * 365 then
-        functions.months <| floor (Time.inHours time / 24 / 12)
+relativeTimeWithFunctions : Zone -> Posix -> RelativeTimeFunctions -> String
+relativeTimeWithFunctions zone posix functions =
+    if Time.toMinute zone posix < 1 then
+        functions.seconds <| Time.toSecond zone posix
+
+    else if Time.toHour zone posix < 1 then
+        functions.minutes <| Time.toMinute zone posix
+
+    else if Time.toHour zone posix < 24 then
+        functions.hours <| Time.toHour zone posix
+
+    else if Time.toHour zone posix < 24 * 30 then
+        functions.days <| (Time.toHour zone posix // 24)
+
+    else if Time.toHour zone posix < 24 * 365 then
+        functions.months <| (Time.toHour zone posix // 24 // 12)
+
     else
-        functions.years <| floor (Time.inHours time / 24 / 365)
+        functions.years <| (Time.toHour zone posix // 24 // 365)
 
 
 defaultSomeSecondsAgo : Int -> String
 defaultSomeSecondsAgo seconds =
     if seconds < 30 then
         "just now"
+
     else
-        toString seconds ++ " seconds ago"
+        String.fromInt seconds ++ " seconds ago"
 
 
 defaultSomeMinutesAgo : Int -> String
 defaultSomeMinutesAgo minutes =
     if minutes < 2 then
         "a minute ago"
+
     else
-        toString minutes ++ " minutes ago"
+        String.fromInt minutes ++ " minutes ago"
 
 
 defaultSomeHoursAgo : Int -> String
 defaultSomeHoursAgo hours =
     if hours < 2 then
         "an hour ago"
+
     else
-        toString hours ++ " hours ago"
+        String.fromInt hours ++ " hours ago"
 
 
 defaultSomeDaysAgo : Int -> String
 defaultSomeDaysAgo days =
     if days < 2 then
         "yesterday"
+
     else
-        toString days ++ " days ago"
+        String.fromInt days ++ " days ago"
 
 
 defaultSomeMonthsAgo : Int -> String
 defaultSomeMonthsAgo months =
     if months < 2 then
         "last month"
+
     else
-        toString months ++ " months ago"
+        String.fromInt months ++ " months ago"
 
 
 defaultSomeYearsAgo : Int -> String
 defaultSomeYearsAgo years =
     if years < 2 then
         "last year"
+
     else
-        toString years ++ " years ago"
+        String.fromInt years ++ " years ago"
 
 
 defaultInSomeSeconds : Int -> String
 defaultInSomeSeconds seconds =
     if seconds < 30 then
         "in a few seconds"
+
     else
-        "in " ++ toString seconds ++ " seconds"
+        "in " ++ String.fromInt seconds ++ " seconds"
 
 
 defaultInSomeMinutes : Int -> String
 defaultInSomeMinutes minutes =
     if minutes < 2 then
         "in a minute"
+
     else
-        "in " ++ toString minutes ++ " minutes"
+        "in " ++ String.fromInt minutes ++ " minutes"
 
 
 defaultInSomeHours : Int -> String
 defaultInSomeHours hours =
     if hours < 2 then
         "in an hour"
+
     else
-        "in " ++ toString hours ++ " hours"
+        "in " ++ String.fromInt hours ++ " hours"
 
 
 defaultInSomeDays : Int -> String
 defaultInSomeDays days =
     if days < 2 then
         "tomorrow"
+
     else
-        "in " ++ toString days ++ " days"
+        "in " ++ String.fromInt days ++ " days"
 
 
 defaultInSomeMonths : Int -> String
 defaultInSomeMonths months =
     if months < 2 then
         "in a month"
+
     else
-        "in " ++ toString months ++ " months"
+        "in " ++ String.fromInt months ++ " months"
 
 
 defaultInSomeYears : Int -> String
 defaultInSomeYears years =
     if years < 2 then
         "in a year"
+
     else
-        "in " ++ toString years ++ " years"
+        "in " ++ String.fromInt years ++ " years"
