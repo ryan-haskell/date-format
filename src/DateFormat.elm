@@ -40,7 +40,7 @@ module DateFormat
         , yearNumberLastTwo
         )
 
-{-| A reliable way to format dates with elm
+{-| A reliable way to format dates and times with Elm.
 
 
 # The `format` function
