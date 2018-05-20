@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Relative exposing (..)
 
 import Browser
 import DateFormat.Relative as Relative
