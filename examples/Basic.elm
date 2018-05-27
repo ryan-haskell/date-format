@@ -6,7 +6,6 @@ import Html exposing (text)
 import Time exposing (Posix, Zone, utc)
 
 
-
 -- Let's create a custom formatter we can use later:
 
 

@@ -1,6 +1,7 @@
 module DateFormat
     exposing
-        ( Token
+        ( FormatOptions
+        , Token
         , amPmLowercase
         , amPmUppercase
         , dayOfMonthFixed
@@ -15,6 +16,7 @@ module DateFormat
         , dayOfYearNumber
         , dayOfYearSuffix
         , format
+        , formatWithOptions
         , hourFixed
         , hourMilitaryFixed
         , hourMilitaryFromOneFixed
@@ -43,9 +45,14 @@ module DateFormat
 {-| A reliable way to format dates and times with Elm.
 
 
-# The `format` function
+# Formatting dates
 
 @docs format
+
+
+# Supporting a different language?
+
+@docs formatWithOptions, FormatOptions
 
 
 # Available formatting options
@@ -114,7 +121,13 @@ module DateFormat
 
 -}
 
-import Time exposing (Month(..), Posix, Weekday(..), Zone)
+import Time
+    exposing
+        ( Month(..)
+        , Posix
+        , Weekday(..)
+        , Zone
+        )
 
 
 {-| Get the numeric value of the month.
@@ -562,10 +575,104 @@ Let's say `ourPosixValue` is November 15, 1993 at 15:06.
 
 -}
 format : List Token -> Zone -> Posix -> String
-format tokens zone time =
+format =
+    formatWithOptions defaultOptions
+
+
+{-| If our users don't speak English, printing out "Monday" or "Tuesday" might not be a great fit.
+
+Thanks to a great recommendation by [Max Goldstein](https://github.com/mgold), `date-format` now supports multilingual output!
+
+All you need to do is provide your own options, and format will use your preferences instead:
+
+For a complete example, check out the [`FormatWithOptions.elm` in the examples folder](https://github.com/ryannhg/date-format/blob/master/examples/FormatWithOptions.elm).
+
+-}
+formatWithOptions : FormatOptions -> List Token -> Zone -> Posix -> String
+formatWithOptions options tokens zone time =
     tokens
-        |> List.map (piece zone time)
+        |> List.map (piece options zone time)
         |> String.join ""
+
+
+{-| These are the available options for formatting our dates.
+
+Here's an example for creating Spanish `FormatOptions`:
+
+    spanishFullMonthName : Time.Month -> String
+    spanishFullMonthName month =
+        case month of
+            Jan ->
+                "Enero"
+
+            Feb ->
+                "Febrero"
+
+            Mar ->
+                "Marzo"
+
+            Apr ->
+                "Abril"
+
+            May ->
+                "Mayo"
+
+            Jun ->
+                "Junio"
+
+            Jul ->
+                "Julio"
+
+            Aug ->
+                "Agosto"
+
+            Sep ->
+                "Septiembre"
+
+            Oct ->
+                "Octubre"
+
+            Nov ->
+                "Noviembre"
+
+            Dec ->
+                "Diciembre"
+
+    spanishDayOfWeekName : Time.Weekday -> String
+    spanishDayOfWeekName weekday =
+        case weekday of
+            Mon ->
+                "Lunes"
+
+            Tue ->
+                "Martes"
+
+            Wed ->
+                "Miércoles"
+
+            Thu ->
+                "Jueves"
+
+            Fri ->
+                "Viernes"
+
+            Sat ->
+                "Sábado"
+
+            Sun ->
+                "Domingo"
+
+    spanishOptions : DateFormat.FormatOptions
+    spanishOptions =
+        { fullMonthName = spanishFullMonthName
+        , dayOfWeekName = spanishDayOfWeekName
+        }
+
+-}
+type alias FormatOptions =
+    { fullMonthName : Time.Month -> String
+    , dayOfWeekName : Time.Weekday -> String
+    }
 
 
 {-| Months of the year, in the correct order.
@@ -600,8 +707,15 @@ days =
     ]
 
 
-piece : Zone -> Posix -> Token -> String
-piece zone posix token =
+defaultOptions : FormatOptions
+defaultOptions =
+    FormatOptions
+        fullMonthName
+        dayOfWeekName
+
+
+piece : FormatOptions -> Zone -> Posix -> Token -> String
+piece options zone posix token =
     case token of
         MonthNumber ->
             monthNumber_ zone posix
@@ -616,11 +730,11 @@ piece zone posix token =
                 |> toFixedLength 2
 
         MonthNameFirst num ->
-            fullMonthName zone posix
+            options.fullMonthName (Time.toMonth zone posix)
                 |> String.left num
 
         MonthNameFull ->
-            fullMonthName zone posix
+            options.fullMonthName (Time.toMonth zone posix)
 
         QuarterNumber ->
             quarter zone posix
@@ -665,11 +779,11 @@ piece zone posix token =
                 |> toSuffix
 
         DayOfWeekNameFirst num ->
-            dayOfWeekName zone posix
+            options.dayOfWeekName (Time.toWeekday zone posix)
                 |> String.left num
 
         DayOfWeekNameFull ->
-            dayOfWeekName zone posix
+            options.dayOfWeekName (Time.toWeekday zone posix)
 
         WeekOfYearNumber ->
             weekOfYear zone posix
@@ -766,9 +880,9 @@ monthNumber_ zone posix =
         |> (+) 1
 
 
-fullMonthName : Zone -> Posix -> String
-fullMonthName zone posix =
-    case Time.toMonth zone posix of
+fullMonthName : Month -> String
+fullMonthName month =
+    case month of
         Jan ->
             "January"
 
@@ -815,7 +929,6 @@ daysInMonth year_ month =
         Feb ->
             if isLeapYear year_ then
                 29
-
             else
                 28
 
@@ -854,13 +967,10 @@ isLeapYear : Int -> Bool
 isLeapYear year_ =
     if modBy 4 year_ /= 0 then
         False
-
     else if modBy 100 year_ /= 0 then
         True
-
     else if modBy 400 year_ /= 0 then
         False
-
     else
         True
 
@@ -917,9 +1027,9 @@ dayOfWeek zone posix =
         |> (\( i, _ ) -> i)
 
 
-dayOfWeekName : Zone -> Posix -> String
-dayOfWeekName zone posix =
-    case Time.toWeekday zone posix of
+dayOfWeekName : Time.Weekday -> String
+dayOfWeekName weekday =
+    case weekday of
         Mon ->
             "Monday"
 
@@ -1003,7 +1113,6 @@ amPm : Zone -> Posix -> String
 amPm zone posix =
     if Time.toHour zone posix > 11 then
         "pm"
-
     else
         "am"
 
@@ -1016,10 +1125,8 @@ toNonMilitary : Int -> Int
 toNonMilitary num =
     if num == 0 then
         12
-
     else if num <= 12 then
         num
-
     else
         num - 12
 

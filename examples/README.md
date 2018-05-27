@@ -1,10 +1,12 @@
-# `date-format` | Examples
+# `date-format` examples
 
 ### Examples
 
-- __`Basic.elm`__ - An example of formatting a single time.
+- __[`Basic.elm`](https://github.com/ryannhg/date-format/blob/master/examples/Basic.elm)__ - An example of formatting a single time.
 
-- __`Relative.elm`__ - An example with relative times.
+- __[`FormatWithOptions.elm`](https://github.com/ryannhg/date-format/blob/master/examples/FormatWithOptions.elm)__ - An example of formatting a single time.
+
+- __[`Relative.elm`](https://github.com/ryannhg/date-format/blob/master/examples/Relative.elm)__ - An example with relative times.
 
 
 
