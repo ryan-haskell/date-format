@@ -1,46 +1,46 @@
 module Tests exposing (suite)
 
-import Expect exposing (Expectation)
-import Test exposing (..)
-import Date exposing (Date)
 import DateFormat
+import Expect exposing (Expectation)
 import Fuzzers
+import Test exposing (..)
+import Time exposing (Posix, utc)
 
 
-atLeast : Int -> DateFormat.Token -> Date -> Expectation
-atLeast min token someDate =
+atLeast : Int -> DateFormat.Token -> Posix -> Expectation
+atLeast min token somePosix =
     let
-        formattedDate =
-            DateFormat.format [ token ] someDate
+        formattedPosix =
+            DateFormat.format [ token ] utc somePosix
     in
-        stringAtLeast min formattedDate
+    stringAtLeast min formattedPosix
 
 
-withinRange : Int -> Int -> DateFormat.Token -> Date -> Expectation
-withinRange min max token someDate =
+withinRange : Int -> Int -> DateFormat.Token -> Posix -> Expectation
+withinRange min max token somePosix =
     let
-        formattedDate =
-            DateFormat.format [ token ] someDate
+        formattedPosix =
+            DateFormat.format [ token ] utc somePosix
     in
-        stringWithinRange min max formattedDate
+    stringWithinRange min max formattedPosix
 
 
-fixedWithinRange : Int -> Int -> Int -> DateFormat.Token -> Date -> Expectation
-fixedWithinRange len min max token someDate =
+fixedWithinRange : Int -> Int -> Int -> DateFormat.Token -> Posix -> Expectation
+fixedWithinRange len min max token somePosix =
     let
-        formattedDate =
-            DateFormat.format [ token ] someDate
+        formattedPosix =
+            DateFormat.format [ token ] utc somePosix
     in
-        Expect.all
-            [ stringWithinRange min max
-            , isLength len
-            ]
-            formattedDate
+    Expect.all
+        [ stringWithinRange min max
+        , isLength len
+        ]
+        formattedPosix
 
 
-formatsWithLength : Int -> DateFormat.Token -> Date -> Expectation
-formatsWithLength len token someDate =
-    DateFormat.format [ token ] someDate
+formatsWithLength : Int -> DateFormat.Token -> Posix -> Expectation
+formatsWithLength len token somePosix =
+    DateFormat.format [ token ] utc somePosix
         |> isLength len
 
 
@@ -52,37 +52,38 @@ isLength len str =
 stringAtLeast : Int -> String -> Expectation
 stringAtLeast min string =
     case String.toInt string of
-        Ok int ->
+        Just int ->
             Expect.atLeast min int
 
-        Err _ ->
+        Nothing ->
             Expect.fail "Doesn't return a number"
 
 
 stringWithinRange : Int -> Int -> String -> Expectation
 stringWithinRange min max string =
     case String.toInt string of
-        Ok int ->
+        Just int ->
             int
                 |> Expect.all
                     [ Expect.atLeast min
                     , Expect.atMost max
                     ]
 
-        Err _ ->
+        Nothing ->
             Expect.fail "Doesn't return a number"
 
 
-suffixWithinRange : Int -> Int -> DateFormat.Token -> Date -> Expectation
-suffixWithinRange min max token someDate =
+suffixWithinRange : Int -> Int -> DateFormat.Token -> Posix -> Expectation
+suffixWithinRange min max token somePosix =
     let
         result =
-            DateFormat.format [ token ] someDate
+            DateFormat.format [ token ] utc somePosix
     in
-        if endsInSuffix result then
-            stringWithinRange min max (String.dropRight 2 result)
-        else
-            Expect.fail "Doesn't end in a suffix."
+    if endsInSuffix result then
+        stringWithinRange min max (String.dropRight 2 result)
+
+    else
+        Expect.fail "Doesn't end in a suffix."
 
 
 endsInSuffix : String -> Bool
@@ -91,7 +92,7 @@ endsInSuffix string =
         lastTwoLetters =
             String.right 2 string
     in
-        List.member lastTwoLetters [ "st", "nd", "rd", "th" ]
+    List.member lastTwoLetters [ "st", "nd", "rd", "th" ]
 
 
 suite : Test
@@ -116,24 +117,25 @@ suite =
             ]
         , describe "monthNameFull"
             [ fuzz Fuzzers.datetime "Starts with first three" <|
-                (\date ->
+                \date ->
                     let
                         firstThree =
                             DateFormat.format
                                 [ DateFormat.monthNameFirstThree ]
+                                utc
                                 date
 
                         fullName =
                             DateFormat.format
                                 [ DateFormat.monthNameFull ]
+                                utc
                                 date
                     in
-                        Expect.equal
-                            (firstThree)
-                            (String.left 3 fullName)
-                )
+                    Expect.equal
+                        firstThree
+                        (String.left 3 fullName)
             , fuzz Fuzzers.datetime "Is a valid month" <|
-                (\date ->
+                \date ->
                     let
                         validMonths =
                             [ "January"
@@ -151,12 +153,11 @@ suite =
                             ]
 
                         monthName =
-                            DateFormat.format [ DateFormat.monthNameFull ] date
+                            DateFormat.format [ DateFormat.monthNameFull ] utc date
                     in
-                        Expect.equal
-                            True
-                            (List.member monthName validMonths)
-                )
+                    Expect.equal
+                        True
+                        (List.member monthName validMonths)
             ]
 
         -- Day of Month
@@ -206,41 +207,43 @@ suite =
             ]
         , describe "dayOfWeekNameFull"
             [ fuzz Fuzzers.datetime "Starts with first two" <|
-                (\date ->
+                \date ->
                     let
                         firstTwo =
                             DateFormat.format
                                 [ DateFormat.dayOfWeekNameFirstTwo ]
+                                utc
                                 date
 
                         fullName =
                             DateFormat.format
                                 [ DateFormat.dayOfWeekNameFull ]
+                                utc
                                 date
                     in
-                        Expect.equal
-                            (firstTwo)
-                            (String.left 2 fullName)
-                )
+                    Expect.equal
+                        firstTwo
+                        (String.left 2 fullName)
             , fuzz Fuzzers.datetime "Starts with first three" <|
-                (\date ->
+                \date ->
                     let
                         firstThree =
                             DateFormat.format
                                 [ DateFormat.dayOfWeekNameFirstThree ]
+                                utc
                                 date
 
                         fullName =
                             DateFormat.format
                                 [ DateFormat.dayOfWeekNameFull ]
+                                utc
                                 date
                     in
-                        Expect.equal
-                            (firstThree)
-                            (String.left 3 fullName)
-                )
+                    Expect.equal
+                        firstThree
+                        (String.left 3 fullName)
             , fuzz Fuzzers.datetime "Is a valid month" <|
-                (\date ->
+                \date ->
                     let
                         validWeekdays =
                             [ "Monday"
@@ -253,12 +256,11 @@ suite =
                             ]
 
                         dayOfWeekName =
-                            DateFormat.format [ DateFormat.dayOfWeekNameFull ] date
+                            DateFormat.format [ DateFormat.dayOfWeekNameFull ] utc date
                     in
-                        Expect.equal
-                            True
-                            (List.member dayOfWeekName validWeekdays)
-                )
+                    Expect.equal
+                        True
+                        (List.member dayOfWeekName validWeekdays)
 
             -- Year
             , describe "yearNumberLastTwo"
@@ -298,33 +300,31 @@ suite =
         -- Week of Year
         , describe "amPmUppercase"
             [ fuzz Fuzzers.datetime "Is either AM or PM" <|
-                (\date ->
+                \date ->
                     let
                         value =
-                            DateFormat.format [ DateFormat.amPmUppercase ] date
+                            DateFormat.format [ DateFormat.amPmUppercase ] utc date
                     in
-                        Expect.equal
-                            True
-                            (List.member
-                                value
-                                [ "AM", "PM" ]
-                            )
-                )
+                    Expect.equal
+                        True
+                        (List.member
+                            value
+                            [ "AM", "PM" ]
+                        )
             ]
         , describe "amPmLowercase"
             [ fuzz Fuzzers.datetime "Is either am or pm" <|
-                (\date ->
+                \date ->
                     let
                         value =
-                            DateFormat.format [ DateFormat.amPmLowercase ] date
+                            DateFormat.format [ DateFormat.amPmLowercase ] utc date
                     in
-                        Expect.equal
-                            True
-                            (List.member
-                                value
-                                [ "am", "pm" ]
-                            )
-                )
+                    Expect.equal
+                        True
+                        (List.member
+                            value
+                            [ "am", "pm" ]
+                        )
             ]
 
         -- Military Hour
@@ -378,10 +378,9 @@ suite =
             ]
         , describe "text"
             [ fuzz Fuzzers.datetimeAndString "Passes through any string" <|
-                (\( date, someString ) ->
+                \( date, someString ) ->
                     Expect.equal
                         someString
-                        (DateFormat.format [ DateFormat.text someString ] date)
-                )
+                        (DateFormat.format [ DateFormat.text someString ] utc date)
             ]
         ]
