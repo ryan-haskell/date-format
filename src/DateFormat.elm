@@ -581,7 +581,7 @@ format =
 
 {-| If our users don't speak English, printing out "Monday" or "Tuesday" might not be a great fit.
 
-Thanks to a great recommendation by [Max Goldstein](https://github.com/mgold), `date-format` now supports multilingual output!
+Thanks to a great recommendation, `date-format` now supports multilingual output!
 
 All you need to do is provide your own options, and format will use your preferences instead:
 
