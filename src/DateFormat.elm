@@ -581,11 +581,9 @@ format =
 
 {-| If our users don't speak English, printing out "Monday" or "Tuesday" might not be a great fit.
 
-Thanks to a great recommendation, `date-format` now supports multilingual output!
-
-All you need to do is provide your own options, and format will use your preferences instead:
-
-For a complete example, check out the [`FormatWithOptions.elm` in the examples folder](https://github.com/ryannhg/date-format/blob/master/examples/FormatWithOptions.elm).
+Thanks to a great recommendation, `date-format` now supports multilingual output! You can find premade formatting for
+some languages in the `DateFormat.Localized` module. All you need to do is provide those or your own options, and
+formatting will use your preferences instead.
 
 -}
 formatWithOptions : FormatOptions -> List Token -> Zone -> Posix -> String
@@ -597,76 +595,7 @@ formatWithOptions options tokens zone time =
 
 {-| These are the available options for formatting our dates.
 
-Here's an example for creating Spanish `FormatOptions`:
-
-    spanishFullMonthName : Time.Month -> String
-    spanishFullMonthName month =
-        case month of
-            Jan ->
-                "Enero"
-
-            Feb ->
-                "Febrero"
-
-            Mar ->
-                "Marzo"
-
-            Apr ->
-                "Abril"
-
-            May ->
-                "Mayo"
-
-            Jun ->
-                "Junio"
-
-            Jul ->
-                "Julio"
-
-            Aug ->
-                "Agosto"
-
-            Sep ->
-                "Septiembre"
-
-            Oct ->
-                "Octubre"
-
-            Nov ->
-                "Noviembre"
-
-            Dec ->
-                "Diciembre"
-
-    spanishDayOfWeekName : Time.Weekday -> String
-    spanishDayOfWeekName weekday =
-        case weekday of
-            Mon ->
-                "Lunes"
-
-            Tue ->
-                "Martes"
-
-            Wed ->
-                "Miércoles"
-
-            Thu ->
-                "Jueves"
-
-            Fri ->
-                "Viernes"
-
-            Sat ->
-                "Sábado"
-
-            Sun ->
-                "Domingo"
-
-    spanishOptions : DateFormat.FormatOptions
-    spanishOptions =
-        { fullMonthName = spanishFullMonthName
-        , dayOfWeekName = spanishDayOfWeekName
-        }
+You can find premade values of this type in the `DateFormat.Localized` module.
 
 -}
 type alias FormatOptions =
