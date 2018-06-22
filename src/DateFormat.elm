@@ -262,7 +262,7 @@ dayOfWeekSuffix =
 
 {-| Gets the name of the day of the week, but just the first two letters.
 
-Examples: `Su, Mo, Tue, ... Fr, Sa`
+Examples: `Su, Mo, Tu, ... Fr, Sa`
 
 -}
 dayOfWeekNameFirstTwo : Token
@@ -310,7 +310,7 @@ yearNumber =
     YearNumber
 
 
-{-| Get the numeric value for the quarter of the year, with a suffix.
+{-| Get the numeric value for the quarter of the year.
 
 Examples: `1, 2, 3, 4`
 
@@ -929,6 +929,7 @@ daysInMonth year_ month =
         Feb ->
             if isLeapYear year_ then
                 29
+
             else
                 28
 
@@ -967,10 +968,13 @@ isLeapYear : Int -> Bool
 isLeapYear year_ =
     if modBy 4 year_ /= 0 then
         False
+
     else if modBy 100 year_ /= 0 then
         True
+
     else if modBy 400 year_ /= 0 then
         False
+
     else
         True
 
@@ -1113,6 +1117,7 @@ amPm : Zone -> Posix -> String
 amPm zone posix =
     if Time.toHour zone posix > 11 then
         "pm"
+
     else
         "am"
 
@@ -1125,8 +1130,10 @@ toNonMilitary : Int -> Int
 toNonMilitary num =
     if num == 0 then
         12
+
     else if num <= 12 then
         num
+
     else
         num - 12
 
