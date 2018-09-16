@@ -8,7 +8,7 @@ import Time exposing (Posix, Zone, utc)
 
 
 main =
-    Browser.embed
+    Browser.element
         { init = init
         , view = view
         , update = update

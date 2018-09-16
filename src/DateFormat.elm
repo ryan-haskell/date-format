@@ -1,14 +1,12 @@
 module DateFormat
     exposing
-        ( FormatOptions
-        , Token
+        ( Token
         , amPmLowercase
         , amPmUppercase
         , dayOfMonthFixed
         , dayOfMonthNumber
         , dayOfMonthSuffix
-        , dayOfWeekNameFirstThree
-        , dayOfWeekNameFirstTwo
+        , dayOfWeekNameAbbreviated
         , dayOfWeekNameFull
         , dayOfWeekNumber
         , dayOfWeekSuffix
@@ -16,7 +14,7 @@ module DateFormat
         , dayOfYearNumber
         , dayOfYearSuffix
         , format
-        , formatWithOptions
+        , formatWithLanguage
         , hourFixed
         , hourMilitaryFixed
         , hourMilitaryFromOneFixed
@@ -26,7 +24,7 @@ module DateFormat
         , minuteFixed
         , minuteNumber
         , monthFixed
-        , monthNameFirstThree
+        , monthNameAbbreviated
         , monthNameFull
         , monthNumber
         , monthSuffix
@@ -52,7 +50,7 @@ module DateFormat
 
 # Supporting a different language?
 
-@docs formatWithOptions, FormatOptions
+@docs formatWithLanguage
 
 
 # Available formatting options
@@ -121,6 +119,7 @@ module DateFormat
 
 -}
 
+import DateFormat.Language exposing (Language, english)
 import Time
     exposing
         ( Month(..)
@@ -165,9 +164,9 @@ monthFixed =
 Examples: `Jan, Feb, Mar, ... Nov, Dec`
 
 -}
-monthNameFirstThree : Token
-monthNameFirstThree =
-    MonthNameFirst 3
+monthNameAbbreviated : Token
+monthNameAbbreviated =
+    MonthNameAbbreviated
 
 
 {-| Get the full name of the month.
@@ -265,19 +264,9 @@ dayOfWeekSuffix =
 Examples: `Su, Mo, Tu, ... Fr, Sa`
 
 -}
-dayOfWeekNameFirstTwo : Token
-dayOfWeekNameFirstTwo =
-    DayOfWeekNameFirst 2
-
-
-{-| Gets the name of the day of the week, but just the first three letters.
-
-Examples: `Sun, Mon, Tue, ... Fri, Sat`
-
--}
-dayOfWeekNameFirstThree : Token
-dayOfWeekNameFirstThree =
-    DayOfWeekNameFirst 3
+dayOfWeekNameAbbreviated : Token
+dayOfWeekNameAbbreviated =
+    DayOfWeekNameAbbreviated
 
 
 {-| Gets the full name of the day of the week.
@@ -504,7 +493,7 @@ type Token
     = MonthNumber
     | MonthSuffix
     | MonthFixed
-    | MonthNameFirst Int
+    | MonthNameAbbreviated
     | MonthNameFull
     | DayOfMonthNumber
     | DayOfMonthSuffix
@@ -514,7 +503,7 @@ type Token
     | DayOfYearFixed
     | DayOfWeekNumber
     | DayOfWeekSuffix
-    | DayOfWeekNameFirst Int
+    | DayOfWeekNameAbbreviated
     | DayOfWeekNameFull
     | YearNumberLastTwo
     | YearNumber
@@ -576,7 +565,7 @@ Let's say `ourPosixValue` is November 15, 1993 at 15:06.
 -}
 format : List Token -> Zone -> Posix -> String
 format =
-    formatWithOptions defaultOptions
+    formatWithLanguage english
 
 
 {-| If our users don't speak English, printing out "Monday" or "Tuesday" might not be a great fit.
@@ -588,91 +577,11 @@ All you need to do is provide your own options, and format will use your prefere
 For a complete example, check out the [`FormatWithOptions.elm` in the examples folder](https://github.com/ryannhg/date-format/blob/master/examples/FormatWithOptions.elm).
 
 -}
-formatWithOptions : FormatOptions -> List Token -> Zone -> Posix -> String
-formatWithOptions options tokens zone time =
+formatWithLanguage : Language -> List Token -> Zone -> Posix -> String
+formatWithLanguage language tokens zone time =
     tokens
-        |> List.map (piece options zone time)
+        |> List.map (piece language zone time)
         |> String.join ""
-
-
-{-| These are the available options for formatting our dates.
-
-Here's an example for creating Spanish `FormatOptions`:
-
-    spanishFullMonthName : Time.Month -> String
-    spanishFullMonthName month =
-        case month of
-            Jan ->
-                "Enero"
-
-            Feb ->
-                "Febrero"
-
-            Mar ->
-                "Marzo"
-
-            Apr ->
-                "Abril"
-
-            May ->
-                "Mayo"
-
-            Jun ->
-                "Junio"
-
-            Jul ->
-                "Julio"
-
-            Aug ->
-                "Agosto"
-
-            Sep ->
-                "Septiembre"
-
-            Oct ->
-                "Octubre"
-
-            Nov ->
-                "Noviembre"
-
-            Dec ->
-                "Diciembre"
-
-    spanishDayOfWeekName : Time.Weekday -> String
-    spanishDayOfWeekName weekday =
-        case weekday of
-            Mon ->
-                "Lunes"
-
-            Tue ->
-                "Martes"
-
-            Wed ->
-                "Miércoles"
-
-            Thu ->
-                "Jueves"
-
-            Fri ->
-                "Viernes"
-
-            Sat ->
-                "Sábado"
-
-            Sun ->
-                "Domingo"
-
-    spanishOptions : DateFormat.FormatOptions
-    spanishOptions =
-        { fullMonthName = spanishFullMonthName
-        , dayOfWeekName = spanishDayOfWeekName
-        }
-
--}
-type alias FormatOptions =
-    { fullMonthName : Time.Month -> String
-    , dayOfWeekName : Time.Weekday -> String
-    }
 
 
 {-| Months of the year, in the correct order.
@@ -707,15 +616,8 @@ days =
     ]
 
 
-defaultOptions : FormatOptions
-defaultOptions =
-    FormatOptions
-        fullMonthName
-        dayOfWeekName
-
-
-piece : FormatOptions -> Zone -> Posix -> Token -> String
-piece options zone posix token =
+piece : Language -> Zone -> Posix -> Token -> String
+piece language zone posix token =
     case token of
         MonthNumber ->
             monthNumber_ zone posix
@@ -723,18 +625,17 @@ piece options zone posix token =
 
         MonthSuffix ->
             monthNumber_ zone posix
-                |> toSuffix
+                |> (\num -> String.fromInt num ++ language.toOrdinalSuffix num)
 
         MonthFixed ->
             monthNumber_ zone posix
                 |> toFixedLength 2
 
-        MonthNameFirst num ->
-            options.fullMonthName (Time.toMonth zone posix)
-                |> String.left num
+        MonthNameAbbreviated ->
+            language.toMonthAbbreviation (Time.toMonth zone posix)
 
         MonthNameFull ->
-            options.fullMonthName (Time.toMonth zone posix)
+            language.toMonthName (Time.toMonth zone posix)
 
         QuarterNumber ->
             quarter zone posix
@@ -744,7 +645,7 @@ piece options zone posix token =
         QuarterSuffix ->
             quarter zone posix
                 |> (+) 1
-                |> toSuffix
+                |> (\num -> String.fromInt num ++ language.toOrdinalSuffix num)
 
         DayOfMonthNumber ->
             dayOfMonth zone posix
@@ -752,7 +653,7 @@ piece options zone posix token =
 
         DayOfMonthSuffix ->
             dayOfMonth zone posix
-                |> toSuffix
+                |> (\num -> String.fromInt num ++ language.toOrdinalSuffix num)
 
         DayOfMonthFixed ->
             dayOfMonth zone posix
@@ -764,7 +665,7 @@ piece options zone posix token =
 
         DayOfYearSuffix ->
             dayOfYear zone posix
-                |> toSuffix
+                |> (\num -> String.fromInt num ++ language.toOrdinalSuffix num)
 
         DayOfYearFixed ->
             dayOfYear zone posix
@@ -776,14 +677,13 @@ piece options zone posix token =
 
         DayOfWeekSuffix ->
             dayOfWeek zone posix
-                |> toSuffix
+                |> (\num -> String.fromInt num ++ language.toOrdinalSuffix num)
 
-        DayOfWeekNameFirst num ->
-            options.dayOfWeekName (Time.toWeekday zone posix)
-                |> String.left num
+        DayOfWeekNameAbbreviated ->
+            language.toWeekdayName (Time.toWeekday zone posix)
 
         DayOfWeekNameFull ->
-            options.dayOfWeekName (Time.toWeekday zone posix)
+            language.toWeekdayAbbreviation (Time.toWeekday zone posix)
 
         WeekOfYearNumber ->
             weekOfYear zone posix
@@ -791,7 +691,7 @@ piece options zone posix token =
 
         WeekOfYearSuffix ->
             weekOfYear zone posix
-                |> toSuffix
+                |> (\num -> String.fromInt num ++ language.toOrdinalSuffix num)
 
         WeekOfYearFixed ->
             weekOfYear zone posix
@@ -805,11 +705,11 @@ piece options zone posix token =
             year zone posix
 
         AmPmUppercase ->
-            amPm zone posix
+            amPm language zone posix
                 |> String.toUpper
 
         AmPmLowercase ->
-            amPm zone posix
+            amPm language zone posix
                 |> String.toLower
 
         HourMilitaryNumber ->
@@ -880,46 +780,6 @@ monthNumber_ zone posix =
         |> (+) 1
 
 
-fullMonthName : Month -> String
-fullMonthName month =
-    case month of
-        Jan ->
-            "January"
-
-        Feb ->
-            "February"
-
-        Mar ->
-            "March"
-
-        Apr ->
-            "April"
-
-        May ->
-            "May"
-
-        Jun ->
-            "June"
-
-        Jul ->
-            "July"
-
-        Aug ->
-            "August"
-
-        Sep ->
-            "September"
-
-        Oct ->
-            "October"
-
-        Nov ->
-            "November"
-
-        Dec ->
-            "December"
-
-
 daysInMonth : Int -> Month -> Int
 daysInMonth year_ month =
     case month of
@@ -929,7 +789,6 @@ daysInMonth year_ month =
         Feb ->
             if isLeapYear year_ then
                 29
-
             else
                 28
 
@@ -968,13 +827,10 @@ isLeapYear : Int -> Bool
 isLeapYear year_ =
     if modBy 4 year_ /= 0 then
         False
-
     else if modBy 100 year_ /= 0 then
         True
-
     else if modBy 400 year_ /= 0 then
         False
-
     else
         True
 
@@ -1014,7 +870,7 @@ dayOfYear zone posix =
                 |> List.map (daysInMonth (Time.toYear zone posix))
                 |> List.sum
     in
-    daysBeforeThisMonth + dayOfMonth zone posix
+        daysBeforeThisMonth + dayOfMonth zone posix
 
 
 
@@ -1029,31 +885,6 @@ dayOfWeek zone posix =
         |> List.head
         |> Maybe.withDefault ( 0, Sun )
         |> (\( i, _ ) -> i)
-
-
-dayOfWeekName : Time.Weekday -> String
-dayOfWeekName weekday =
-    case weekday of
-        Mon ->
-            "Monday"
-
-        Tue ->
-            "Tuesday"
-
-        Wed ->
-            "Wednesday"
-
-        Thu ->
-            "Thursday"
-
-        Fri ->
-            "Friday"
-
-        Sat ->
-            "Saturday"
-
-        Sun ->
-            "Sunday"
 
 
 
@@ -1082,7 +913,7 @@ weekOfYear zone posix =
         firstDayOffset =
             dayOfWeek zone firstDay
     in
-    (daysSoFar + firstDayOffset) // 7 + 1
+        (daysSoFar + firstDayOffset) // 7 + 1
 
 
 millisecondsPerYear : Int
@@ -1113,13 +944,9 @@ year zone time =
 -- AM / PM
 
 
-amPm : Zone -> Posix -> String
-amPm zone posix =
-    if Time.toHour zone posix > 11 then
-        "pm"
-
-    else
-        "am"
+amPm : Language -> Zone -> Posix -> String
+amPm language zone posix =
+    language.toAmPm (Time.toHour zone posix)
 
 
 
@@ -1130,10 +957,8 @@ toNonMilitary : Int -> Int
 toNonMilitary num =
     if num == 0 then
         12
-
     else if num <= 12 then
         num
-
     else
         num - 12
 
@@ -1156,35 +981,4 @@ toFixedLength totalChars num =
                 |> List.map (\_ -> "0")
                 |> String.join ""
     in
-    zeros ++ numStr
-
-
-toSuffix : Int -> String
-toSuffix num =
-    let
-        suffix =
-            case num of
-                11 ->
-                    "th"
-
-                12 ->
-                    "th"
-
-                13 ->
-                    "th"
-
-                _ ->
-                    case modBy 10 num of
-                        1 ->
-                            "st"
-
-                        2 ->
-                            "nd"
-
-                        3 ->
-                            "rd"
-
-                        _ ->
-                            "th"
-    in
-    String.fromInt num ++ suffix
+        zeros ++ numStr

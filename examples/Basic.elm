@@ -1,6 +1,6 @@
 module Basic exposing (..)
 
-import Browser exposing (staticPage)
+import Browser exposing (sandbox)
 import DateFormat
 import Html exposing (text)
 import Time exposing (Posix, Zone, utc)
@@ -48,4 +48,8 @@ ourPrettyDate =
 
 
 main =
-    staticPage (text ourPrettyDate)
+    sandbox
+        { init = Nothing
+        , update = (\_ _ -> Nothing)
+        , view = (\_ -> text ourPrettyDate)
+        }

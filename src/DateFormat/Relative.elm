@@ -3,6 +3,7 @@ module DateFormat.Relative
         ( RelativeTimeOptions
         , relativeTime
         , relativeTimeWithOptions
+        , defaultRelativeOptions
         )
 
 {-| A reliable way to get a pretty message for the relative time difference between two dates.
@@ -10,7 +11,7 @@ module DateFormat.Relative
 
 # Getting relative time for two dates
 
-@docs relativeTime, relativeTimeWithOptions, RelativeTimeOptions
+@docs relativeTime, relativeTimeWithOptions, RelativeTimeOptions, defaultRelativeOptions
 
 -}
 
@@ -59,26 +60,26 @@ relativeTimeWithOptions options start end =
         time =
             Time.millisToPosix (abs differenceInMilliseconds)
     in
-    if differenceInMilliseconds == 0 then
-        options.rightNow
-    else
-        relativeTimeWithFunctions utc time <|
-            if differenceInMilliseconds < 0 then
-                RelativeTimeFunctions
-                    options.someSecondsAgo
-                    options.someMinutesAgo
-                    options.someHoursAgo
-                    options.someDaysAgo
-                    options.someMonthsAgo
-                    options.someYearsAgo
-            else
-                RelativeTimeFunctions
-                    options.inSomeSeconds
-                    options.inSomeMinutes
-                    options.inSomeHours
-                    options.inSomeDays
-                    options.inSomeMonths
-                    options.inSomeYears
+        if differenceInMilliseconds == 0 then
+            options.rightNow
+        else
+            relativeTimeWithFunctions utc time <|
+                if differenceInMilliseconds < 0 then
+                    RelativeTimeFunctions
+                        options.someSecondsAgo
+                        options.someMinutesAgo
+                        options.someHoursAgo
+                        options.someDaysAgo
+                        options.someMonthsAgo
+                        options.someYearsAgo
+                else
+                    RelativeTimeFunctions
+                        options.inSomeSeconds
+                        options.inSomeMinutes
+                        options.inSomeHours
+                        options.inSomeDays
+                        options.inSomeMonths
+                        options.inSomeYears
 
 
 {-| Options for configuring your own relative message formats!
@@ -119,6 +120,8 @@ type alias RelativeTimeOptions =
     }
 
 
+{-| If there is something you'd like to tweak based off of the defaults, this record might be a good starting point!
+-}
 defaultRelativeOptions : RelativeTimeOptions
 defaultRelativeOptions =
     { someSecondsAgo = defaultSomeSecondsAgo

@@ -4,7 +4,7 @@
 
 - __[`Basic.elm`](https://github.com/ryannhg/date-format/blob/master/examples/Basic.elm)__ - An example of formatting a single time.
 
-- __[`FormatWithOptions.elm`](https://github.com/ryannhg/date-format/blob/master/examples/FormatWithOptions.elm)__ - An example of formatting a single time.
+- __[`Language.elm`](https://github.com/ryannhg/date-format/blob/master/examples/Language.elm)__ - An example of formatting a single time in another language.
 
 - __[`Relative.elm`](https://github.com/ryannhg/date-format/blob/master/examples/Relative.elm)__ - An example with relative times.
 
