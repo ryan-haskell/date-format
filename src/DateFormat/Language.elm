@@ -97,7 +97,7 @@ toEnglishAmPm hour =
 
 toEnglishSuffix : Int -> String
 toEnglishSuffix num =
-    case num of
+    case modBy 100 num of
         11 ->
             "th"
 
