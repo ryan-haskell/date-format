@@ -1,7 +1,7 @@
 # date-format
 > A reliable way to format dates and times with Elm.
 
-[![Build Status](https://travis-ci.org/ryannhg/elm-date-format.svg?branch=master)](https://travis-ci.org/ryannhg/elm-date-format)
+[![Build Status](https://travis-ci.org/ryannhg/date-format.svg?branch=master)](https://travis-ci.org/ryannhg/date-format)
 
 
 ### Using the [elm package](http://package.elm-lang.org/packages/ryannhg/date-format/latest)
