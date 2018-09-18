@@ -1,44 +1,20 @@
-module DateFormat
-    exposing
-        ( Token
-        , amPmLowercase
-        , amPmUppercase
-        , dayOfMonthFixed
-        , dayOfMonthNumber
-        , dayOfMonthSuffix
-        , dayOfWeekNameAbbreviated
-        , dayOfWeekNameFull
-        , dayOfWeekNumber
-        , dayOfWeekSuffix
-        , dayOfYearFixed
-        , dayOfYearNumber
-        , dayOfYearSuffix
-        , format
-        , formatWithLanguage
-        , hourFixed
-        , hourMilitaryFixed
-        , hourMilitaryFromOneFixed
-        , hourMilitaryFromOneNumber
-        , hourMilitaryNumber
-        , hourNumber
-        , minuteFixed
-        , minuteNumber
-        , monthFixed
-        , monthNameAbbreviated
-        , monthNameFull
-        , monthNumber
-        , monthSuffix
-        , quarterNumber
-        , quarterSuffix
-        , secondFixed
-        , secondNumber
-        , text
-        , weekOfYearFixed
-        , weekOfYearNumber
-        , weekOfYearSuffix
-        , yearNumber
-        , yearNumberLastTwo
-        )
+module DateFormat exposing
+    ( format
+    , formatWithLanguage
+    , Token
+    , monthNumber, monthSuffix, monthFixed, monthNameAbbreviated, monthNameFull
+    , dayOfMonthNumber, dayOfMonthSuffix, dayOfMonthFixed
+    , dayOfYearNumber, dayOfYearSuffix, dayOfYearFixed
+    , dayOfWeekNumber, dayOfWeekSuffix, dayOfWeekNameAbbreviated, dayOfWeekNameFull
+    , yearNumberLastTwo, yearNumber
+    , quarterNumber, quarterSuffix
+    , weekOfYearNumber, weekOfYearSuffix, weekOfYearFixed
+    , amPmUppercase, amPmLowercase
+    , hourMilitaryNumber, hourMilitaryFixed, hourNumber, hourFixed, hourMilitaryFromOneNumber, hourMilitaryFromOneFixed
+    , minuteNumber, minuteFixed
+    , secondNumber, secondFixed
+    , text
+    )
 
 {-| A reliable way to format dates and times with Elm.
 
@@ -60,7 +36,7 @@ module DateFormat
 
 ## Month
 
-@docs monthNumber, monthSuffix, monthFixed, monthNameFirstThree, monthNameFull
+@docs monthNumber, monthSuffix, monthFixed, monthNameAbbreviated, monthNameFull
 
 
 ## Day of the Month
@@ -75,7 +51,7 @@ module DateFormat
 
 ## Day of the Week
 
-@docs dayOfWeekNumber, dayOfWeekSuffix, dayOfWeekNameFirstTwo, dayOfWeekNameFirstThree, dayOfWeekNameFull
+@docs dayOfWeekNumber, dayOfWeekSuffix, dayOfWeekNameAbbreviated, dayOfWeekNameFull
 
 
 ## Year
@@ -159,7 +135,8 @@ monthFixed =
     MonthFixed
 
 
-{-| Get the name of the month, but just the first three letters.
+{-| Get the name of the month, but abbreviated (abbreviation function comes from the language
+settings)
 
 Examples: `Jan, Feb, Mar, ... Nov, Dec`
 
@@ -540,6 +517,7 @@ Let's say `ourPosixValue` is November 15, 1993 at 15:06.
         utc
         ourPosixValue
 
+
     -- "3:06 pm"
     format
         [ hourNumber
@@ -550,6 +528,7 @@ Let's say `ourPosixValue` is November 15, 1993 at 15:06.
         ]
         utc
         ourPosixValue
+
 
     -- "Nov 15th, 1993"
     format
@@ -680,10 +659,10 @@ piece language zone posix token =
                 |> (\num -> String.fromInt num ++ language.toOrdinalSuffix num)
 
         DayOfWeekNameAbbreviated ->
-            language.toWeekdayName (Time.toWeekday zone posix)
+            language.toWeekdayAbbreviation (Time.toWeekday zone posix)
 
         DayOfWeekNameFull ->
-            language.toWeekdayAbbreviation (Time.toWeekday zone posix)
+            language.toWeekdayName (Time.toWeekday zone posix)
 
         WeekOfYearNumber ->
             weekOfYear zone posix
@@ -789,6 +768,7 @@ daysInMonth year_ month =
         Feb ->
             if isLeapYear year_ then
                 29
+
             else
                 28
 
@@ -827,10 +807,13 @@ isLeapYear : Int -> Bool
 isLeapYear year_ =
     if modBy 4 year_ /= 0 then
         False
+
     else if modBy 100 year_ /= 0 then
         True
+
     else if modBy 400 year_ /= 0 then
         False
+
     else
         True
 
@@ -870,7 +853,7 @@ dayOfYear zone posix =
                 |> List.map (daysInMonth (Time.toYear zone posix))
                 |> List.sum
     in
-        daysBeforeThisMonth + dayOfMonth zone posix
+    daysBeforeThisMonth + dayOfMonth zone posix
 
 
 
@@ -913,7 +896,7 @@ weekOfYear zone posix =
         firstDayOffset =
             dayOfWeek zone firstDay
     in
-        (daysSoFar + firstDayOffset) // 7 + 1
+    (daysSoFar + firstDayOffset) // 7 + 1
 
 
 millisecondsPerYear : Int
@@ -957,8 +940,10 @@ toNonMilitary : Int -> Int
 toNonMilitary num =
     if num == 0 then
         12
+
     else if num <= 12 then
         num
+
     else
         num - 12
 
@@ -981,4 +966,4 @@ toFixedLength totalChars num =
                 |> List.map (\_ -> "0")
                 |> String.join ""
     in
-        zeros ++ numStr
+    zeros ++ numStr

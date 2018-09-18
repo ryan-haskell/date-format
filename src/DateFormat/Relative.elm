@@ -1,10 +1,4 @@
-module DateFormat.Relative
-    exposing
-        ( RelativeTimeOptions
-        , relativeTime
-        , relativeTimeWithOptions
-        , defaultRelativeOptions
-        )
+module DateFormat.Relative exposing (relativeTime, relativeTimeWithOptions, RelativeTimeOptions, defaultRelativeOptions)
 
 {-| A reliable way to get a pretty message for the relative time difference between two dates.
 
@@ -22,17 +16,21 @@ import Time exposing (Month(..), Posix, Weekday(..), Zone, utc)
 
 Here are a few examples to help:
 
-    relativeTime now tenSecondsAgo ==  "just now"
-    relativeTime now tenSecondsFromNow ==  "in a few seconds"
+    relativeTime now tenSecondsAgo == "just now"
+
+    relativeTime now tenSecondsFromNow == "in a few seconds"
 
     relativeTime now fortyThreeMinutesAgo == "43 minutes ago"
 
     relativeTime now oneHundredDaysAgo == "100 days ago"
+
     relativeTime now oneHundredDaysFromNow == "in 100 days"
 
+
     -- Order matters!
-    relativeTime now tenSecondsAgo ==  "just now"
-    relativeTime tenSecondsAgo now ==  "in a few seconds"
+    relativeTime now tenSecondsAgo == "just now"
+
+    relativeTime tenSecondsAgo now == "in a few seconds"
 
 -}
 relativeTime : Posix -> Posix -> String
@@ -55,31 +53,29 @@ relativeTimeWithOptions options start end =
         differenceInMilliseconds : Int
         differenceInMilliseconds =
             toMilliseconds end - toMilliseconds start
-
-        time : Posix
-        time =
-            Time.millisToPosix (abs differenceInMilliseconds)
     in
-        if differenceInMilliseconds == 0 then
-            options.rightNow
-        else
-            relativeTimeWithFunctions utc time <|
-                if differenceInMilliseconds < 0 then
-                    RelativeTimeFunctions
-                        options.someSecondsAgo
-                        options.someMinutesAgo
-                        options.someHoursAgo
-                        options.someDaysAgo
-                        options.someMonthsAgo
-                        options.someYearsAgo
-                else
-                    RelativeTimeFunctions
-                        options.inSomeSeconds
-                        options.inSomeMinutes
-                        options.inSomeHours
-                        options.inSomeDays
-                        options.inSomeMonths
-                        options.inSomeYears
+    if differenceInMilliseconds == 0 then
+        options.rightNow
+
+    else
+        relativeTimeWithFunctions utc (abs differenceInMilliseconds) <|
+            if differenceInMilliseconds < 0 then
+                RelativeTimeFunctions
+                    options.someSecondsAgo
+                    options.someMinutesAgo
+                    options.someHoursAgo
+                    options.someDaysAgo
+                    options.someMonthsAgo
+                    options.someYearsAgo
+
+            else
+                RelativeTimeFunctions
+                    options.inSomeSeconds
+                    options.inSomeMinutes
+                    options.inSomeHours
+                    options.inSomeDays
+                    options.inSomeMonths
+                    options.inSomeYears
 
 
 {-| Options for configuring your own relative message formats!
@@ -90,6 +86,7 @@ For example, here is how `someSecondsAgo` is implemented by default:
     defaultSomeSecondsAgo seconds =
         if seconds < 30 then
             "just now"
+
         else
             toString seconds ++ " seconds ago"
 
@@ -99,6 +96,7 @@ And here is how `inSomeHours` might look:
     defaultInSomeHours hours =
         if hours < 2 then
             "in an hour"
+
         else
             "in " ++ toString hours ++ " hours"
 
@@ -155,20 +153,41 @@ type alias RelativeTimeFunctions =
     }
 
 
-relativeTimeWithFunctions : Zone -> Posix -> RelativeTimeFunctions -> String
-relativeTimeWithFunctions zone posix functions =
-    if Time.toMinute zone posix < 1 then
+relativeTimeWithFunctions : Zone -> Int -> RelativeTimeFunctions -> String
+relativeTimeWithFunctions zone millis functions =
+    let
+        posix =
+            Time.millisToPosix millis
+
+        seconds =
+            millis // 1000
+
+        minutes =
+            seconds // 60
+
+        hours =
+            minutes // 60
+
+        days =
+            hours // 24
+    in
+    if minutes < 1 then
         functions.seconds <| Time.toSecond zone posix
-    else if Time.toHour zone posix < 1 then
+
+    else if hours < 1 then
         functions.minutes <| Time.toMinute zone posix
-    else if Time.toHour zone posix < 24 then
+
+    else if hours < 24 then
         functions.hours <| Time.toHour zone posix
-    else if Time.toHour zone posix < 24 * 30 then
-        functions.days <| (Time.toHour zone posix // 24)
-    else if Time.toHour zone posix < 24 * 365 then
-        functions.months <| (Time.toHour zone posix // 24 // 12)
+
+    else if days < 30 then
+        functions.days <| days
+
+    else if days < 365 then
+        functions.months <| (days // 12)
+
     else
-        functions.years <| (Time.toHour zone posix // 24 // 365)
+        functions.years <| (days // 365)
 
 
 defaultRightNow : String
@@ -180,6 +199,7 @@ defaultSomeSecondsAgo : Int -> String
 defaultSomeSecondsAgo seconds =
     if seconds < 30 then
         "just now"
+
     else
         String.fromInt seconds ++ " seconds ago"
 
@@ -188,6 +208,7 @@ defaultSomeMinutesAgo : Int -> String
 defaultSomeMinutesAgo minutes =
     if minutes < 2 then
         "a minute ago"
+
     else
         String.fromInt minutes ++ " minutes ago"
 
@@ -196,6 +217,7 @@ defaultSomeHoursAgo : Int -> String
 defaultSomeHoursAgo hours =
     if hours < 2 then
         "an hour ago"
+
     else
         String.fromInt hours ++ " hours ago"
 
@@ -204,6 +226,7 @@ defaultSomeDaysAgo : Int -> String
 defaultSomeDaysAgo days =
     if days < 2 then
         "yesterday"
+
     else
         String.fromInt days ++ " days ago"
 
@@ -212,6 +235,7 @@ defaultSomeMonthsAgo : Int -> String
 defaultSomeMonthsAgo months =
     if months < 2 then
         "last month"
+
     else
         String.fromInt months ++ " months ago"
 
@@ -220,6 +244,7 @@ defaultSomeYearsAgo : Int -> String
 defaultSomeYearsAgo years =
     if years < 2 then
         "last year"
+
     else
         String.fromInt years ++ " years ago"
 
@@ -228,6 +253,7 @@ defaultInSomeSeconds : Int -> String
 defaultInSomeSeconds seconds =
     if seconds < 30 then
         "in a few seconds"
+
     else
         "in " ++ String.fromInt seconds ++ " seconds"
 
@@ -236,6 +262,7 @@ defaultInSomeMinutes : Int -> String
 defaultInSomeMinutes minutes =
     if minutes < 2 then
         "in a minute"
+
     else
         "in " ++ String.fromInt minutes ++ " minutes"
 
@@ -244,6 +271,7 @@ defaultInSomeHours : Int -> String
 defaultInSomeHours hours =
     if hours < 2 then
         "in an hour"
+
     else
         "in " ++ String.fromInt hours ++ " hours"
 
@@ -252,6 +280,7 @@ defaultInSomeDays : Int -> String
 defaultInSomeDays days =
     if days < 2 then
         "tomorrow"
+
     else
         "in " ++ String.fromInt days ++ " days"
 
@@ -260,6 +289,7 @@ defaultInSomeMonths : Int -> String
 defaultInSomeMonths months =
     if months < 2 then
         "in a month"
+
     else
         "in " ++ String.fromInt months ++ " months"
 
@@ -268,5 +298,6 @@ defaultInSomeYears : Int -> String
 defaultInSomeYears years =
     if years < 2 then
         "in a year"
+
     else
         "in " ++ String.fromInt years ++ " years"
