@@ -376,6 +376,14 @@ suite =
             [ fuzz Fuzzers.datetime "Is between 0 and 59" <|
                 fixedWithinRange 2 0 59 DateFormat.secondFixed
             ]
+        , describe "millisecondNumber"
+            [ fuzz Fuzzers.datetime "Is between 0 and 999" <|
+                withinRange 0 999 DateFormat.millisecondNumber
+            ]
+        , describe "millisecondFixed"
+            [ fuzz Fuzzers.datetime "Is between 0 and 59" <|
+                fixedWithinRange 3 0 999 DateFormat.millisecondFixed
+            ]
         , describe "text"
             [ fuzz Fuzzers.datetimeAndString "Passes through any string" <|
                 \( date, someString ) ->

@@ -32,6 +32,8 @@ module DateFormat
         , quarterSuffix
         , secondFixed
         , secondNumber
+        , millisecondNumber
+        , millisecondFixed
         , text
         , weekOfYearFixed
         , weekOfYearNumber
@@ -111,6 +113,10 @@ module DateFormat
 ## Second
 
 @docs secondNumber, secondFixed
+
+## Millisecond
+
+@docs millisecondNumber, millisecondFixed
 
 
 ## Other Stuff
@@ -468,6 +474,24 @@ secondFixed : Token
 secondFixed =
     SecondFixed
 
+{-| Get the milliseconds of the second.
+
+Examples: `0, 1, 2, ... 998, 999`
+
+-}
+millisecondNumber : Token
+millisecondNumber =
+    MillisecondNumber
+
+{-| Get the milliseconds of the second, fixed to three places.
+
+Examples: `000, 001, 002, ... 998, 999`
+
+-}
+millisecondFixed : Token
+millisecondFixed =
+    MillisecondFixed
+
 
 {-| Represent a string value
 
@@ -524,6 +548,8 @@ type Token
     | MinuteFixed
     | SecondNumber
     | SecondFixed
+    | MillisecondNumber
+    | MillisecondFixed
     | Text String
 
 
@@ -755,6 +781,15 @@ piece language zone posix token =
         SecondFixed ->
             Time.toSecond zone posix
                 |> toFixedLength 2
+
+
+        MillisecondNumber ->
+            Time.toMillis zone posix
+                |> String.fromInt
+
+        MillisecondFixed ->
+            Time.toMillis zone posix
+                |> toFixedLength 3
 
         Text string ->
             string
