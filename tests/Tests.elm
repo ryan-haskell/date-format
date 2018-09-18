@@ -111,17 +111,17 @@ suite =
             [ fuzz Fuzzers.datetime "Is between 1 and 12" <|
                 fixedWithinRange 2 1 12 DateFormat.monthFixed
             ]
-        , describe "monthNameFirstThree"
+        , describe "monthNameAbbreviated"
             [ fuzz Fuzzers.datetime "Is always three characters long" <|
-                formatsWithLength 3 DateFormat.monthNameFirstThree
+                formatsWithLength 3 DateFormat.monthNameAbbreviated
             ]
         , describe "monthNameFull"
-            [ fuzz Fuzzers.datetime "Starts with first three" <|
+            [ fuzz Fuzzers.datetime "Starts with abbreviation" <|
                 \date ->
                     let
-                        firstThree =
+                        abbrev =
                             DateFormat.format
-                                [ DateFormat.monthNameFirstThree ]
+                                [ DateFormat.monthNameAbbreviated ]
                                 utc
                                 date
 
@@ -132,7 +132,7 @@ suite =
                                 date
                     in
                     Expect.equal
-                        firstThree
+                        abbrev
                         (String.left 3 fullName)
             , fuzz Fuzzers.datetime "Is a valid month" <|
                 \date ->
@@ -197,21 +197,17 @@ suite =
             [ fuzz Fuzzers.datetime "Is between 0 and 6" <|
                 suffixWithinRange 0 6 DateFormat.dayOfWeekSuffix
             ]
-        , describe "dayOfWeekNameFirstTwo"
-            [ fuzz Fuzzers.datetime "Is always two characters long" <|
-                formatsWithLength 2 DateFormat.dayOfWeekNameFirstTwo
-            ]
-        , describe "dayOfWeekNameFirstThree"
+        , describe "dayOfWeekNameAbbreviated"
             [ fuzz Fuzzers.datetime "Is always three characters long" <|
-                formatsWithLength 3 DateFormat.dayOfWeekNameFirstThree
+                formatsWithLength 3 DateFormat.dayOfWeekNameAbbreviated
             ]
         , describe "dayOfWeekNameFull"
-            [ fuzz Fuzzers.datetime "Starts with first two" <|
+            [ fuzz Fuzzers.datetime "Starts with abbreviation" <|
                 \date ->
                     let
-                        firstTwo =
+                        abbrev =
                             DateFormat.format
-                                [ DateFormat.dayOfWeekNameFirstTwo ]
+                                [ DateFormat.dayOfWeekNameAbbreviated ]
                                 utc
                                 date
 
@@ -222,25 +218,7 @@ suite =
                                 date
                     in
                     Expect.equal
-                        firstTwo
-                        (String.left 2 fullName)
-            , fuzz Fuzzers.datetime "Starts with first three" <|
-                \date ->
-                    let
-                        firstThree =
-                            DateFormat.format
-                                [ DateFormat.dayOfWeekNameFirstThree ]
-                                utc
-                                date
-
-                        fullName =
-                            DateFormat.format
-                                [ DateFormat.dayOfWeekNameFull ]
-                                utc
-                                date
-                    in
-                    Expect.equal
-                        firstThree
+                        abbrev
                         (String.left 3 fullName)
             , fuzz Fuzzers.datetime "Is a valid month" <|
                 \date ->
