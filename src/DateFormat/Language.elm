@@ -1,9 +1,8 @@
-module DateFormat.Language
-    exposing
-        ( Language
-        , english
-        , spanish
-        )
+module DateFormat.Language exposing
+    ( Language
+    , english
+    , spanish
+    )
 
 import Time exposing (Month(..), Weekday(..))
 
@@ -91,6 +90,7 @@ toEnglishAmPm : Int -> String
 toEnglishAmPm hour =
     if hour > 11 then
         "pm"
+
     else
         "am"
 
