@@ -1,4 +1,4 @@
-module Language exposing (..)
+module Language exposing (main)
 
 import Browser exposing (sandbox)
 import DateFormat
@@ -65,10 +65,10 @@ ourSpanishDate =
 main =
     sandbox
         { init = Nothing
-        , update = (\_ _ -> Nothing)
+        , update = \_ _ -> Nothing
         , view =
-            (\_ ->
-                (div []
+            \_ ->
+                div []
                     [ p []
                         [ strong [] [ text "Default: " ]
                         , text ourDefaultDate
@@ -78,6 +78,4 @@ main =
                         , text ourSpanishDate
                         ]
                     ]
-                )
-            )
         }

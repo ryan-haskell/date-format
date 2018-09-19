@@ -1,9 +1,10 @@
-module Basic exposing (..)
+module Basic exposing (main)
 
 import Browser exposing (sandbox)
 import DateFormat
 import Html exposing (text)
 import Time exposing (Posix, Zone, utc)
+
 
 
 -- Let's create a custom formatter we can use later:
@@ -50,6 +51,6 @@ ourPrettyDate =
 main =
     sandbox
         { init = Nothing
-        , update = (\_ _ -> Nothing)
-        , view = (\_ -> text ourPrettyDate)
+        , update = \_ _ -> Nothing
+        , view = \_ -> text ourPrettyDate
         }

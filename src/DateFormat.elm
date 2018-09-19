@@ -1,46 +1,21 @@
-module DateFormat
-    exposing
-        ( Token
-        , amPmLowercase
-        , amPmUppercase
-        , dayOfMonthFixed
-        , dayOfMonthNumber
-        , dayOfMonthSuffix
-        , dayOfWeekNameAbbreviated
-        , dayOfWeekNameFull
-        , dayOfWeekNumber
-        , dayOfWeekSuffix
-        , dayOfYearFixed
-        , dayOfYearNumber
-        , dayOfYearSuffix
-        , format
-        , formatWithLanguage
-        , hourFixed
-        , hourMilitaryFixed
-        , hourMilitaryFromOneFixed
-        , hourMilitaryFromOneNumber
-        , hourMilitaryNumber
-        , hourNumber
-        , minuteFixed
-        , minuteNumber
-        , monthFixed
-        , monthNameAbbreviated
-        , monthNameFull
-        , monthNumber
-        , monthSuffix
-        , quarterNumber
-        , quarterSuffix
-        , secondFixed
-        , secondNumber
-        , millisecondNumber
-        , millisecondFixed
-        , text
-        , weekOfYearFixed
-        , weekOfYearNumber
-        , weekOfYearSuffix
-        , yearNumber
-        , yearNumberLastTwo
-        )
+module DateFormat exposing
+    ( format
+    , formatWithLanguage
+    , Token
+    , monthNumber, monthSuffix, monthFixed, monthNameAbbreviated, monthNameFull
+    , dayOfMonthNumber, dayOfMonthSuffix, dayOfMonthFixed
+    , dayOfYearNumber, dayOfYearSuffix, dayOfYearFixed
+    , dayOfWeekNumber, dayOfWeekSuffix, dayOfWeekNameAbbreviated, dayOfWeekNameFull
+    , yearNumberLastTwo, yearNumber
+    , quarterNumber, quarterSuffix
+    , weekOfYearNumber, weekOfYearSuffix, weekOfYearFixed
+    , amPmUppercase, amPmLowercase
+    , hourMilitaryNumber, hourMilitaryFixed, hourNumber, hourFixed, hourMilitaryFromOneNumber, hourMilitaryFromOneFixed
+    , minuteNumber, minuteFixed
+    , secondNumber, secondFixed
+    , millisecondNumber, millisecondFixed
+    , text
+    )
 
 {-| A reliable way to format dates and times with Elm.
 
@@ -113,6 +88,7 @@ module DateFormat
 ## Second
 
 @docs secondNumber, secondFixed
+
 
 ## Millisecond
 
@@ -475,6 +451,7 @@ secondFixed : Token
 secondFixed =
     SecondFixed
 
+
 {-| Get the milliseconds of the second.
 
 Examples: `0, 1, 2, ... 998, 999`
@@ -483,6 +460,7 @@ Examples: `0, 1, 2, ... 998, 999`
 millisecondNumber : Token
 millisecondNumber =
     MillisecondNumber
+
 
 {-| Get the milliseconds of the second, fixed to three places.
 
@@ -784,7 +762,6 @@ piece language zone posix token =
         SecondFixed ->
             Time.toSecond zone posix
                 |> toFixedLength 2
-
 
         MillisecondNumber ->
             Time.toMillis zone posix
