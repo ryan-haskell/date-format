@@ -1,12 +1,38 @@
-module DateFormat.Language exposing
-    ( Language
-    , english
-    , spanish
-    )
+module DateFormat.Language
+    exposing
+        ( Language
+        , english
+        , spanish
+        )
+
+{-|
+
+
+## Fun fact: Some people don't know english.
+
+That's why it's important to include alternative date formatting options for other languages!
+
+This module exposes `Language`, along with a few implementations.
+
+(If you want to see `french`, `german`, or `greek`, please add them in! I'm happy to make your language a part of the package!)
+
+
+### Language
+
+@docs Language
+
+
+### Languages
+
+@docs english, spanish
+
+-}
 
 import Time exposing (Month(..), Weekday(..))
 
 
+{-| A record with options for your language.
+-}
 type alias Language =
     { toMonthName : Month -> String
     , toMonthAbbreviation : Month -> String
@@ -90,7 +116,6 @@ toEnglishAmPm : Int -> String
 toEnglishAmPm hour =
     if hour > 11 then
         "pm"
-
     else
         "am"
 
@@ -122,6 +147,8 @@ toEnglishSuffix num =
                     "th"
 
 
+{-| The english language! (used by default)
+-}
 english : Language
 english =
     Language
@@ -137,6 +164,8 @@ english =
 -- Spanish
 
 
+{-| The spanish language!
+-}
 spanish : Language
 spanish =
     Language
