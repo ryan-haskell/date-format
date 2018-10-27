@@ -1,9 +1,8 @@
-module DateFormat.Language
-    exposing
-        ( Language
-        , english
-        , spanish
-        )
+module DateFormat.Language exposing
+    ( Language
+    , english, spanish
+    , dutch
+    )
 
 {-|
 
@@ -116,6 +115,7 @@ toEnglishAmPm : Int -> String
 toEnglishAmPm hour =
     if hour > 11 then
         "pm"
+
     else
         "am"
 
@@ -240,3 +240,94 @@ toSpanishWeekdayName weekday =
 
         Sun ->
             "Domingo"
+
+
+
+-- Dutch
+
+
+{-| The dutch language!
+-}
+dutch : Language
+dutch =
+    Language
+        toDutchMonthName
+        (toDutchMonthName >> String.left 3)
+        toDutchWeekdayName
+        (toDutchWeekdayName >> String.left 3)
+        toEnglishAmPm
+        toDutchSuffix
+
+
+toDutchMonthName : Time.Month -> String
+toDutchMonthName month =
+    case month of
+        Jan ->
+            "januari"
+
+        Feb ->
+            "februari"
+
+        Mar ->
+            "maart"
+
+        Apr ->
+            "april"
+
+        May ->
+            "mei"
+
+        Jun ->
+            "juni"
+
+        Jul ->
+            "juli"
+
+        Aug ->
+            "augustus"
+
+        Sep ->
+            "september"
+
+        Oct ->
+            "oktober"
+
+        Nov ->
+            "november"
+
+        Dec ->
+            "december"
+
+
+toDutchWeekdayName : Time.Weekday -> String
+toDutchWeekdayName weekday =
+    case weekday of
+        Mon ->
+            "maandag"
+
+        Tue ->
+            "dinsdag"
+
+        Wed ->
+            "woensdag"
+
+        Thu ->
+            "donderdag"
+
+        Fri ->
+            "vrijdag"
+
+        Sat ->
+            "zaterdag"
+
+        Sun ->
+            "zondag"
+
+
+toDutchSuffix : Int -> String
+toDutchSuffix num =
+    if num > 20 || num == 1 || num == 8 then
+        "ste"
+
+    else
+        "de"
