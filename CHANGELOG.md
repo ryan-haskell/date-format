@@ -8,6 +8,17 @@ If you'd like to see differences between your version and the one you want to up
 
 ---
 
+### `2.2.0`
+
+This is a MINOR change.
+
+#### DateFormat.Language - MINOR
+
+    Added:
+        swedish : DateFormat.Language.Language
+
+---
+
 ### `2.1.0`
 
 This is a MINOR change.
