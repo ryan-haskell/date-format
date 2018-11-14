@@ -1,6 +1,7 @@
 module DateFormat.Language exposing
     ( Language
     , english, spanish, dutch
+    , swedish
     )
 
 {-|
@@ -330,3 +331,85 @@ toDutchSuffix num =
 
     else
         "de"
+
+
+
+-- Swedish
+
+
+{-| The Swedish language!
+-}
+swedish : Language
+swedish =
+    Language
+        toSwedishMonthName
+        (toSwedishMonthName >> String.left 3)
+        toSwedishWeekdayName
+        (toSwedishWeekdayName >> String.left 3)
+        toEnglishAmPm
+        (\_ -> "")
+
+
+toSwedishMonthName : Time.Month -> String
+toSwedishMonthName month =
+    case month of
+        Jan ->
+            "januari"
+
+        Feb ->
+            "februari"
+
+        Mar ->
+            "mars"
+
+        Apr ->
+            "april"
+
+        May ->
+            "maj"
+
+        Jun ->
+            "juni"
+
+        Jul ->
+            "juli"
+
+        Aug ->
+            "augusti"
+
+        Sep ->
+            "september"
+
+        Oct ->
+            "oktober"
+
+        Nov ->
+            "november"
+
+        Dec ->
+            "december"
+
+
+toSwedishWeekdayName : Time.Weekday -> String
+toSwedishWeekdayName weekday =
+    case weekday of
+        Mon ->
+            "måndag"
+
+        Tue ->
+            "tisdag"
+
+        Wed ->
+            "onsdag"
+
+        Thu ->
+            "torsdag"
+
+        Fri ->
+            "fredag"
+
+        Sat ->
+            "lördag"
+
+        Sun ->
+            "söndag"
