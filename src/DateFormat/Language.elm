@@ -23,7 +23,7 @@ This module exposes `Language`, along with a few implementations.
 
 ### Languages
 
-@docs english, spanish, dutch
+@docs english, spanish, dutch, swedish
 
 -}
 
