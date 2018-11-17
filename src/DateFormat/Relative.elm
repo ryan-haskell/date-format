@@ -184,7 +184,7 @@ relativeTimeWithFunctions zone millis functions =
         functions.days <| days
 
     else if days < 365 then
-        functions.months <| (days // 12)
+        functions.months <| (days // 30)
 
     else
         functions.years <| (days // 365)
