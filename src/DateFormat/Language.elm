@@ -1,7 +1,6 @@
 module DateFormat.Language exposing
     ( Language
-    , english, spanish, dutch
-    , swedish
+    , english, spanish, dutch, swedish, portuguese
     )
 
 {-|
@@ -23,7 +22,7 @@ This module exposes `Language`, along with a few implementations.
 
 ### Languages
 
-@docs english, spanish, dutch, swedish
+@docs english, spanish, dutch, swedish, portuguese
 
 -}
 
@@ -413,3 +412,85 @@ toSwedishWeekdayName weekday =
 
         Sun ->
             "söndag"
+
+
+
+-- Portuguese
+
+
+{-| The Portuguese language!
+-}
+portuguese : Language
+portuguese =
+    Language
+        toPortugueseMonthName
+        (toPortugueseMonthName >> String.left 3)
+        toPortugueseWeekdayName
+        (toPortugueseWeekdayName >> String.left 3)
+        toEnglishAmPm
+        (always "°")
+
+
+toPortugueseMonthName : Time.Month -> String
+toPortugueseMonthName month =
+    case month of
+        Jan ->
+            "Janeiro"
+
+        Feb ->
+            "Fevereiro"
+
+        Mar ->
+            "Março"
+
+        Apr ->
+            "Abril"
+
+        May ->
+            "Maio"
+
+        Jun ->
+            "Junho"
+
+        Jul ->
+            "Julho"
+
+        Aug ->
+            "Agosto"
+
+        Sep ->
+            "Setembro"
+
+        Oct ->
+            "Outubro"
+
+        Nov ->
+            "Novembro"
+
+        Dec ->
+            "Dezembro"
+
+
+toPortugueseWeekdayName : Time.Weekday -> String
+toPortugueseWeekdayName weekday =
+    case weekday of
+        Mon ->
+            "Segunda"
+
+        Tue ->
+            "Terça"
+
+        Wed ->
+            "Quarta"
+
+        Thu ->
+            "Quinta"
+
+        Fri ->
+            "Sexta"
+
+        Sat ->
+            "Sábado"
+
+        Sun ->
+            "Domingo"
