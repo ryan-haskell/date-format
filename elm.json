@@ -3,7 +3,7 @@
     "name": "ryannhg/date-format",
     "summary": "A reliable way to format dates and times with Elm.",
     "license": "BSD-3-Clause",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "exposed-modules": [
         "DateFormat",
         "DateFormat.Language",
