@@ -5,6 +5,16 @@ If you'd like to see differences between your version and the one you want to up
 
 `elm diff ryannhg/date-format <version> <another-version>`
 
+---
+
+### `2.3.0`
+
+This is a MINOR change.
+
+#### DateFormat.Language - MINOR
+
+    Added:
+        portuguese : DateFormat.Language.Language
 
 ---
 
