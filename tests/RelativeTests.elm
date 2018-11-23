@@ -31,6 +31,10 @@ addDays days =
     addHours (days * 24)
 
 
+addMonths months =
+    addDays (months * 30)
+
+
 suite : Test
 suite =
     describe "The DateFormat.Relative module"
@@ -68,6 +72,26 @@ suite =
             \days ->
                 relativeTime time (addDays days)
                     |> Expect.equal (String.fromInt (abs days) ++ " days ago")
+        , fuzz (Fuzz.intRange -11 -2) "2-11 months ago" <|
+            \days ->
+                relativeTime time (addMonths days)
+                    |> Expect.equal (String.fromInt (abs days) ++ " months ago")
+        , test "12 months ago" <|
+            \_ ->
+                relativeTime time (addMonths -12)
+                    |> Expect.equal "12 months ago"
+        , test "last year" <|
+            \_ ->
+                relativeTime time (addMonths -13)
+                    |> Expect.equal "last year"
+        , test "last year 2" <|
+            \_ ->
+                relativeTime time (addMonths -23)
+                    |> Expect.equal "last year"
+        , test "2 years ago" <|
+            \_ ->
+                relativeTime time (addMonths -25)
+                    |> Expect.equal "2 years ago"
         , fuzz (Fuzz.intRange 1 29) "next 29s" <|
             \secs ->
                 relativeTime time (addSeconds secs)
@@ -100,4 +124,24 @@ suite =
             \days ->
                 relativeTime time (addDays days)
                     |> Expect.equal ("in " ++ String.fromInt (abs days) ++ " days")
+        , fuzz (Fuzz.intRange 2 11) "in 2-11 months" <|
+            \days ->
+                relativeTime time (addMonths days)
+                    |> Expect.equal ("in " ++ String.fromInt (abs days) ++ " months")
+        , test "in 12 months" <|
+            \_ ->
+                relativeTime time (addMonths 12)
+                    |> Expect.equal "in 12 months"
+        , test "in a year" <|
+            \_ ->
+                relativeTime time (addMonths 13)
+                    |> Expect.equal "in a year"
+        , test "in a year 2" <|
+            \_ ->
+                relativeTime time (addMonths 23)
+                    |> Expect.equal "in a year"
+        , test "in 2 years" <|
+            \_ ->
+                relativeTime time (addMonths 25)
+                    |> Expect.equal "in 2 years"
         ]
