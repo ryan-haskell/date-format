@@ -545,7 +545,6 @@ Let's say `ourPosixValue` is November 15, 1993 at 15:06.
         utc
         ourPosixValue
 
-
     -- "3:06 pm"
     format
         [ hourNumber
@@ -557,10 +556,9 @@ Let's say `ourPosixValue` is November 15, 1993 at 15:06.
         utc
         ourPosixValue
 
-
     -- "Nov 15th, 1993"
     format
-        [ monthNameFirstThree
+        [ monthNameAbbreviated
         , text " "
         , dayOfMonthSuffix
         , text ", "
