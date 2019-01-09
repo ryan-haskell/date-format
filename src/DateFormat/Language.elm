@@ -1,7 +1,6 @@
 module DateFormat.Language exposing
     ( Language
-    , english, spanish, dutch, swedish, portuguese
-    , finnish
+    , english, spanish, dutch, swedish, portuguese, finnish
     )
 
 {-|
@@ -23,7 +22,7 @@ This module exposes `Language`, along with a few implementations.
 
 ### Languages
 
-@docs english, spanish, dutch, swedish, portuguese
+@docs english, spanish, dutch, swedish, portuguese, finnish
 
 -}
 
