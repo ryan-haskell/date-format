@@ -1,6 +1,7 @@
 module DateFormat.Language exposing
     ( Language
     , english, spanish, dutch, swedish, portuguese
+    , finnish
     )
 
 {-|
@@ -494,3 +495,98 @@ toPortugueseWeekdayName weekday =
 
         Sun ->
             "Domingo"
+
+
+
+-- Finnish
+
+
+toFinnishMonthName : Month -> String
+toFinnishMonthName month =
+    case month of
+        Jan ->
+            "tammikuu"
+
+        Feb ->
+            "helmikuu"
+
+        Mar ->
+            "maaliskuu"
+
+        Apr ->
+            "huhtikuu"
+
+        May ->
+            "toukokuu"
+
+        Jun ->
+            "kesäkuu"
+
+        Jul ->
+            "heinäkuu"
+
+        Aug ->
+            "elokuu"
+
+        Sep ->
+            "syyskuu"
+
+        Oct ->
+            "lokakuu"
+
+        Nov ->
+            "marraskuu"
+
+        Dec ->
+            "joulukuu"
+
+
+toFinnishWeekdayName : Weekday -> String
+toFinnishWeekdayName weekday =
+    case weekday of
+        Mon ->
+            "maanantai"
+
+        Tue ->
+            "tiistai"
+
+        Wed ->
+            "keskiviikko"
+
+        Thu ->
+            "torstai"
+
+        Fri ->
+            "perjantai"
+
+        Sat ->
+            "lauantai"
+
+        Sun ->
+            "sunnuntai"
+
+
+{-| Only 24h formats are used in the Finnish language. AM/PM do technically have translations,
+but using them would go against the [guidelines](http://www.kielitoimistonohjepankki.fi/ohje/51).
+-}
+toFinnishAmPm : Int -> String
+toFinnishAmPm _ =
+    ""
+
+
+toFinnishSuffix : Int -> String
+toFinnishSuffix _ =
+    "."
+
+
+{-| The Finnish language!
+-}
+finnish : Language
+finnish =
+    Language
+        toFinnishMonthName
+        (toFinnishMonthName >> String.replace "kuu" "")
+        toFinnishWeekdayName
+        (toFinnishWeekdayName >> String.left 2)
+        toFinnishAmPm
+        toFinnishSuffix
