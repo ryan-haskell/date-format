@@ -1,14 +1,15 @@
-module DateFormat.Relative exposing (relativeTime, relativeTimeWithOptions, RelativeTimeOptions, defaultRelativeOptions)
+module DateFormat.Relative exposing (relativeTime, relativeTimeWithOptions)
 
 {-| A reliable way to get a pretty message for the relative time difference between two dates.
 
 
 # Getting relative time for two dates
 
-@docs relativeTime, relativeTimeWithOptions, RelativeTimeOptions, defaultRelativeOptions
+@docs relativeTime, relativeTimeWithOptions
 
 -}
 
+import DateFormat.Relative.Language exposing (RelativeTimeOptions)
 import Time exposing (Month(..), Posix, Weekday(..), Zone, utc)
 
 
@@ -26,7 +27,6 @@ Here are a few examples to help:
 
     relativeTime now oneHundredDaysFromNow == "in 100 days"
 
-
     -- Order matters!
     relativeTime now tenSecondsAgo == "just now"
 
@@ -35,14 +35,15 @@ Here are a few examples to help:
 -}
 relativeTime : Posix -> Posix -> String
 relativeTime =
-    relativeTimeWithOptions defaultRelativeOptions
+    relativeTimeWithOptions DateFormat.Relative.Language.english
 
 
 {-| Maybe `relativeTime` is too lame. (Or maybe you speak a different language than English!)
 
-With `relativeTimeWithOptions`, you can provide your own custom messages for each time range.
+With `relativeTimeWithOptions`, you can use one of the predefined options in
+`DateFormat.Relative.Language` or even provide your own custom messages for each time range.
 
-(That's what `relativeTime` uses under the hood!)
+That's what `relativeTime` does: it uses the `english` options under the hood!
 
 You can provide a set of your own custom options, and use `relativeTimeWithOptions` instead.
 
@@ -76,66 +77,6 @@ relativeTimeWithOptions options start end =
                     options.inSomeDays
                     options.inSomeMonths
                     options.inSomeYears
-
-
-{-| Options for configuring your own relative message formats!
-
-For example, here is how `someSecondsAgo` is implemented by default:
-
-    defaultSomeSecondsAgo : Int -> String
-    defaultSomeSecondsAgo seconds =
-        if seconds < 30 then
-            "just now"
-
-        else
-            toString seconds ++ " seconds ago"
-
-And here is how `inSomeHours` might look:
-
-    defaultInSomeHours : Int -> String
-    defaultInSomeHours hours =
-        if hours < 2 then
-            "in an hour"
-
-        else
-            "in " ++ toString hours ++ " hours"
-
--}
-type alias RelativeTimeOptions =
-    { someSecondsAgo : Int -> String
-    , someMinutesAgo : Int -> String
-    , someHoursAgo : Int -> String
-    , someDaysAgo : Int -> String
-    , someMonthsAgo : Int -> String
-    , someYearsAgo : Int -> String
-    , rightNow : String
-    , inSomeSeconds : Int -> String
-    , inSomeMinutes : Int -> String
-    , inSomeHours : Int -> String
-    , inSomeDays : Int -> String
-    , inSomeMonths : Int -> String
-    , inSomeYears : Int -> String
-    }
-
-
-{-| If there is something you'd like to tweak based off of the defaults, this record might be a good starting point!
--}
-defaultRelativeOptions : RelativeTimeOptions
-defaultRelativeOptions =
-    { someSecondsAgo = defaultSomeSecondsAgo
-    , someMinutesAgo = defaultSomeMinutesAgo
-    , someHoursAgo = defaultSomeHoursAgo
-    , someDaysAgo = defaultSomeDaysAgo
-    , someMonthsAgo = defaultSomeMonthsAgo
-    , someYearsAgo = defaultSomeYearsAgo
-    , rightNow = defaultRightNow
-    , inSomeSeconds = defaultInSomeSeconds
-    , inSomeMinutes = defaultInSomeMinutes
-    , inSomeHours = defaultInSomeHours
-    , inSomeDays = defaultInSomeDays
-    , inSomeMonths = defaultInSomeMonths
-    , inSomeYears = defaultInSomeYears
-    }
 
 
 toMilliseconds : Posix -> Int
@@ -188,116 +129,3 @@ relativeTimeWithFunctions zone millis functions =
 
     else
         functions.years <| (days // 365)
-
-
-defaultRightNow : String
-defaultRightNow =
-    "right now"
-
-
-defaultSomeSecondsAgo : Int -> String
-defaultSomeSecondsAgo seconds =
-    if seconds < 30 then
-        "just now"
-
-    else
-        String.fromInt seconds ++ " seconds ago"
-
-
-defaultSomeMinutesAgo : Int -> String
-defaultSomeMinutesAgo minutes =
-    if minutes < 2 then
-        "a minute ago"
-
-    else
-        String.fromInt minutes ++ " minutes ago"
-
-
-defaultSomeHoursAgo : Int -> String
-defaultSomeHoursAgo hours =
-    if hours < 2 then
-        "an hour ago"
-
-    else
-        String.fromInt hours ++ " hours ago"
-
-
-defaultSomeDaysAgo : Int -> String
-defaultSomeDaysAgo days =
-    if days < 2 then
-        "yesterday"
-
-    else
-        String.fromInt days ++ " days ago"
-
-
-defaultSomeMonthsAgo : Int -> String
-defaultSomeMonthsAgo months =
-    if months < 2 then
-        "last month"
-
-    else
-        String.fromInt months ++ " months ago"
-
-
-defaultSomeYearsAgo : Int -> String
-defaultSomeYearsAgo years =
-    if years < 2 then
-        "last year"
-
-    else
-        String.fromInt years ++ " years ago"
-
-
-defaultInSomeSeconds : Int -> String
-defaultInSomeSeconds seconds =
-    if seconds < 30 then
-        "in a few seconds"
-
-    else
-        "in " ++ String.fromInt seconds ++ " seconds"
-
-
-defaultInSomeMinutes : Int -> String
-defaultInSomeMinutes minutes =
-    if minutes < 2 then
-        "in a minute"
-
-    else
-        "in " ++ String.fromInt minutes ++ " minutes"
-
-
-defaultInSomeHours : Int -> String
-defaultInSomeHours hours =
-    if hours < 2 then
-        "in an hour"
-
-    else
-        "in " ++ String.fromInt hours ++ " hours"
-
-
-defaultInSomeDays : Int -> String
-defaultInSomeDays days =
-    if days < 2 then
-        "tomorrow"
-
-    else
-        "in " ++ String.fromInt days ++ " days"
-
-
-defaultInSomeMonths : Int -> String
-defaultInSomeMonths months =
-    if months < 2 then
-        "in a month"
-
-    else
-        "in " ++ String.fromInt months ++ " months"
-
-
-defaultInSomeYears : Int -> String
-defaultInSomeYears years =
-    if years < 2 then
-        "in a year"
-
-    else
-        "in " ++ String.fromInt years ++ " years"
