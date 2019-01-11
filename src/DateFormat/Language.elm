@@ -581,7 +581,7 @@ toFrenchMonthAbbreviation month =
             "août"
 
         Sep ->
-            "septembre"
+            "sept"
 
         Oct ->
             "oct"
