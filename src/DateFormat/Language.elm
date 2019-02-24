@@ -1,6 +1,12 @@
 module DateFormat.Language exposing
     ( Language
-    , english, spanish, dutch, swedish, portuguese, greek
+    , english
+    , spanish
+    , dutch
+    , swedish
+    , portuguese
+    , greek
+    , french
     )
 
 {-|
@@ -12,7 +18,7 @@ That's why it's important to include alternative date formatting options for oth
 
 This module exposes `Language`, along with a few implementations.
 
-(If you want to see `french`, `german`, please add them in! I'm happy to make your language a part of the package!)
+(If you want to see other languages here, please add them in! I'm happy to make your language a part of the package!)
 
 
 ### Language
@@ -22,7 +28,7 @@ This module exposes `Language`, along with a few implementations.
 
 ### Languages
 
-@docs english, spanish, dutch, swedish, portuguese, greek
+@docs english, spanish, dutch, swedish, portuguese, greek, french
 
 -}
 
@@ -596,3 +602,133 @@ greek =
         (toGreekWeekdayName >> String.left 3)
         toGreekAmPm
         toGreekSuffix
+
+
+-- French
+
+
+{-| The French language!
+-}
+french : Language
+french =
+    Language
+        toFrenchMonthName
+        toFrenchMonthAbbreviation
+        toFrenchWeekdayName
+        (toFrenchWeekdayName >> String.left 3)
+        toEnglishAmPm
+        toFrenchOrdinalSuffix
+
+
+toFrenchMonthName : Month -> String
+toFrenchMonthName month =
+    case month of
+        Jan ->
+            "janvier"
+
+        Feb ->
+            "février"
+
+        Mar ->
+            "mars"
+
+        Apr ->
+            "avril"
+
+        May ->
+            "mai"
+
+        Jun ->
+            "juin"
+
+        Jul ->
+            "juillet"
+
+        Aug ->
+            "août"
+
+        Sep ->
+            "septembre"
+
+        Oct ->
+            "octobre"
+
+        Nov ->
+            "novembre"
+
+        Dec ->
+            "décembre"
+
+
+toFrenchMonthAbbreviation : Month -> String
+toFrenchMonthAbbreviation month =
+    case month of
+        Jan ->
+            "janv"
+
+        Feb ->
+            "févr"
+
+        Mar ->
+            "mars"
+
+        Apr ->
+            "avr"
+
+        May ->
+            "mai"
+
+        Jun ->
+            "juin"
+
+        Jul ->
+            "juil"
+
+        Aug ->
+            "août"
+
+        Sep ->
+            "sept"
+
+        Oct ->
+            "oct"
+
+        Nov ->
+            "nov"
+
+        Dec ->
+            "déc"
+
+
+toFrenchWeekdayName : Weekday -> String
+toFrenchWeekdayName weekday =
+    case weekday of
+        Mon ->
+            "lundi"
+
+        Tue ->
+            "mardi"
+
+        Wed ->
+            "mercredi"
+
+        Thu ->
+            "jeudi"
+
+        Fri ->
+            "vendredi"
+
+        Sat ->
+            "samedi"
+
+        Sun ->
+            "dimanche"
+
+
+toFrenchOrdinalSuffix : Int -> String
+toFrenchOrdinalSuffix n =
+    if n == 1 then
+        "er"
+
+    else
+        "e"
