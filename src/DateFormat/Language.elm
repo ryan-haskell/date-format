@@ -1,6 +1,6 @@
 module DateFormat.Language exposing
     ( Language
-    , english, spanish, dutch, swedish, portuguese, french
+    , english, spanish, dutch, swedish, portuguese, french, german
     )
 
 {-|
@@ -22,7 +22,7 @@ This module exposes `Language`, along with a few implementations.
 
 ### Languages
 
-@docs english, spanish, dutch, swedish, portuguese, french
+@docs english, spanish, dutch, swedish, portuguese, french, german
 
 -}
 
@@ -625,3 +625,89 @@ toFrenchOrdinalSuffix n =
 
     else
         "e"
+
+
+
+-- German
+
+
+{-| The German language!
+-}
+german : Language
+german =
+    let
+        withDot str =
+            str ++ "."
+    in
+    Language
+        toGermanMonthName
+        (toGermanMonthName >> String.left 3 >> withDot)
+        toGermanWeekdayName
+        (toGermanWeekdayName >> String.left 2 >> withDot)
+        toEnglishAmPm
+        (\_ -> ".")
+
+
+toGermanMonthName : Month -> String
+toGermanMonthName month =
+    case month of
+        Jan ->
+            "Januar"
+
+        Feb ->
+            "Februar"
+
+        Mar ->
+            "März"
+
+        Apr ->
+            "April"
+
+        May ->
+            "Mai"
+
+        Jun ->
+            "Juni"
+
+        Jul ->
+            "Juli"
+
+        Aug ->
+            "August"
+
+        Sep ->
+            "September"
+
+        Oct ->
+            "Oktober"
+
+        Nov ->
+            "November"
+
+        Dec ->
+            "Dezember"
+
+
+toGermanWeekdayName : Weekday -> String
+toGermanWeekdayName weekday =
+    case weekday of
+        Mon ->
+            "Montag"
+
+        Tue ->
+            "Dienstag"
+
+        Wed ->
+            "Mittwoch"
+
+        Thu ->
+            "Donnerstag"
+
+        Fri ->
+            "Freitag"
+
+        Sat ->
+            "Samstag"
+
+        Sun ->
+            "Sonntag"
