@@ -2,11 +2,11 @@
 
 ### Examples
 
-- __[`Basic.elm`](https://github.com/ryannhg/date-format/blob/master/examples/Basic.elm)__ - An example of formatting a single time.
+- __[`Basic.elm`](https://github.com/ryan-haskell/date-format/blob/master/examples/Basic.elm)__ - An example of formatting a single time.
 
-- __[`Language.elm`](https://github.com/ryannhg/date-format/blob/master/examples/Language.elm)__ - An example of formatting a single time in another language.
+- __[`Language.elm`](https://github.com/ryan-haskell/date-format/blob/master/examples/Language.elm)__ - An example of formatting a single time in another language.
 
-- __[`Relative.elm`](https://github.com/ryannhg/date-format/blob/master/examples/Relative.elm)__ - An example with relative times.
+- __[`Relative.elm`](https://github.com/ryan-haskell/date-format/blob/master/examples/Relative.elm)__ - An example with relative times.
 
 
 
@@ -14,7 +14,7 @@
 
 Here's how you can try them out:
 
-1. `git clone https://github.com/ryannhg/date-format`
+1. `git clone https://github.com/ryan-haskell/date-format`
 
 1. `cd date-format/examples`
 

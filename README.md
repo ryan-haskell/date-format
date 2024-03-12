@@ -1,13 +1,13 @@
 # date-format
 > A reliable way to format dates and times with Elm.
 
-[![Build Status](https://travis-ci.org/ryannhg/date-format.svg?branch=master)](https://travis-ci.org/ryannhg/date-format)
+[![Build Status](https://travis-ci.org/ryan-haskell/date-format.svg?branch=master)](https://travis-ci.org/ryan-haskell/date-format)
 
 
-### Using the [elm package](http://package.elm-lang.org/packages/ryannhg/date-format/latest)
+### Using the [elm package](http://package.elm-lang.org/packages/ryan-haskell/date-format/latest)
 
 ```
-elm install ryannhg/date-format
+elm install ryan-haskell/date-format
 ```
 
 
@@ -80,7 +80,7 @@ I've created a few more examples in the `examples/` folder for this repo.
 
 Here's how you can try them out:
 
-1. `git clone https://github.com/ryannhg/date-format`
+1. `git clone https://github.com/ryan-haskell/date-format`
 
 1. `cd date-format/examples`
 

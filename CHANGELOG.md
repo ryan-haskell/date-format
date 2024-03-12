@@ -3,7 +3,7 @@
 
 If you'd like to see differences between your version and the one you want to upgrade, you can run:
 
-`elm diff ryannhg/date-format <version> <another-version>`
+`elm diff ryan-haskell/date-format <version> <another-version>`
 
 ---
 

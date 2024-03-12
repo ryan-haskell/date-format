@@ -579,7 +579,7 @@ Thanks to a great recommendation, `date-format` now supports multilingual output
 
 All you need to do is provide your own options, and format will use your preferences instead:
 
-For a complete example, check out the [`FormatWithOptions.elm` in the examples folder](https://github.com/ryannhg/date-format/blob/master/examples/FormatWithOptions.elm).
+For a complete example, check out the [`FormatWithOptions.elm` in the examples folder](https://github.com/ryan-haskell/date-format/blob/master/examples/FormatWithOptions.elm).
 
 -}
 formatWithLanguage : Language -> List Token -> Zone -> Posix -> String
