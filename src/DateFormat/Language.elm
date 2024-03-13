@@ -1,6 +1,6 @@
 module DateFormat.Language exposing
     ( Language
-    , english, spanish, dutch, swedish, portuguese, french
+    , english, spanish, dutch, swedish, portuguese, french, hungarian
     )
 
 {-|
@@ -22,7 +22,7 @@ This module exposes `Language`, along with a few implementations.
 
 ### Languages
 
-@docs english, spanish, dutch, swedish, portuguese, french
+@docs english, spanish, dutch, swedish, portuguese, french, hungarian
 
 -}
 
@@ -625,3 +625,134 @@ toFrenchOrdinalSuffix n =
 
     else
         "e"
+
+
+
+-- Hungarian
+
+
+{-| The hungarian language!
+-}
+hungarian : Language
+hungarian =
+    Language
+        toHungarianMonthName
+        toHungarianMonthAbbreviaton
+        toHungarianWeekdayName
+        toHungarianWeekdayName
+        toHungarianAmPm
+        (always ".")
+
+
+toHungarianMonthName : Time.Month -> String
+toHungarianMonthName month =
+    case month of
+        Jan ->
+            "január"
+
+        Feb ->
+            "február"
+
+        Mar ->
+            "március"
+
+        Apr ->
+            "április"
+
+        May ->
+            "május"
+
+        Jun ->
+            "június"
+
+        Jul ->
+            "július"
+
+        Aug ->
+            "augusztus"
+
+        Sep ->
+            "szeptember"
+
+        Oct ->
+            "október"
+
+        Nov ->
+            "november"
+
+        Dec ->
+            "decemeber"
+
+
+toHungarianMonthAbbreviaton : Time.Month -> String
+toHungarianMonthAbbreviaton month =
+    case month of
+        Jan ->
+            "jan."
+
+        Feb ->
+            "febr."
+
+        Mar ->
+            "márc."
+
+        Apr ->
+            "ápr."
+
+        May ->
+            "máj."
+
+        Jun ->
+            "jún."
+
+        Jul ->
+            "júl."
+
+        Aug ->
+            "aug."
+
+        Sep ->
+            "szept."
+
+        Oct ->
+            "okt."
+
+        Nov ->
+            "nov."
+
+        Dec ->
+            "dec."
+
+
+toHungarianWeekdayName : Time.Weekday -> String
+toHungarianWeekdayName weekday =
+    case weekday of
+        Mon ->
+            "hétfő"
+
+        Tue ->
+            "kedd"
+
+        Wed ->
+            "szerda"
+
+        Thu ->
+            "csütörtök"
+
+        Fri ->
+            "péntek"
+
+        Sat ->
+            "szombat"
+
+        Sun ->
+            "vasárnap"
+
+
+toHungarianAmPm : Int -> String
+toHungarianAmPm hour =
+    if hour > 11 then
+        "du."
+
+    else
+        "de."
