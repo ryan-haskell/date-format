@@ -1,6 +1,12 @@
 module DateFormat.Language exposing
     ( Language
-    , english, spanish, dutch, swedish, portuguese, french
+    , english
+    , spanish
+    , dutch
+    , swedish
+    , portuguese
+    , greek
+    , french
     )
 
 {-|
@@ -12,7 +18,7 @@ That's why it's important to include alternative date formatting options for oth
 
 This module exposes `Language`, along with a few implementations.
 
-(If you want to see `german`, `greek`, or `swahili`, please add them in! I'm happy to make your language a part of the package!)
+(If you want to see other languages here, please add them in! I'm happy to make your language a part of the package!)
 
 
 ### Language
@@ -22,7 +28,7 @@ This module exposes `Language`, along with a few implementations.
 
 ### Languages
 
-@docs english, spanish, dutch, swedish, portuguese, french
+@docs english, spanish, dutch, swedish, portuguese, greek, french
 
 -}
 
@@ -495,6 +501,107 @@ toPortugueseWeekdayName weekday =
         Sun ->
             "Domingo"
 
+
+
+-- Greek
+
+
+toGreekMonthName : Month -> String
+toGreekMonthName month =
+    case month of
+        Jan ->
+            "Ιανουαρίου"
+
+        Feb ->
+            "Φεβρουαρίου"
+
+        Mar ->
+            "Μαρτίου"
+
+        Apr ->
+            "Απριλίου"
+
+        May ->
+            "Μαΐου"
+
+        Jun ->
+            "Ιουνίου"
+
+        Jul ->
+            "Ιουλίου"
+
+        Aug ->
+            "Αυγούστου"
+
+        Sep ->
+            "Σεπτεμβρίου"
+
+        Oct ->
+            "Οκτωβρίου"
+
+        Nov ->
+            "Νοεμβρίου"
+
+        Dec ->
+            "Δεκεμβρίου"
+
+
+toGreekWeekdayName : Weekday -> String
+toGreekWeekdayName weekday =
+    case weekday of
+        Mon ->
+            "Δευτέρα"
+
+        Tue ->
+            "Τρίτη"
+
+        Wed ->
+            "Τετάρτη"
+
+        Thu ->
+            "Πέμπτη"
+
+        Fri ->
+            "Παρασκευή"
+
+        Sat ->
+            "Σάββατο"
+
+        Sun ->
+            "Κυριακή"
+
+
+toGreekAmPm : Int -> String
+toGreekAmPm hour =
+    if hour > 11 then
+        "μμ"
+
+    else
+        "πμ"
+
+
+toGreekSuffix : Int -> String
+toGreekSuffix num =
+    "η"
+
+
+{-| The greek language!
+-}
+greek : Language
+greek =
+    Language
+        toGreekMonthName
+        (\month ->
+            if List.member month [ Jun, Jul ] then
+                (toGreekMonthName >> String.left 4) month
+
+            else
+                (toGreekMonthName >> String.left 3) month
+        )
+        toGreekWeekdayName
+        (toGreekWeekdayName >> String.left 3)
+        toGreekAmPm
+        toGreekSuffix
 
 
 -- French
