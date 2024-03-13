@@ -1,6 +1,6 @@
 module DateFormat.Language exposing
     ( Language
-    , english, spanish, dutch, swedish, portuguese, french
+    , english, spanish, dutch, swedish, portuguese, french, norwegian
     )
 
 {-|
@@ -22,7 +22,7 @@ This module exposes `Language`, along with a few implementations.
 
 ### Languages
 
-@docs english, spanish, dutch, swedish, portuguese, french
+@docs english, spanish, dutch, swedish, portuguese, french, norwegian
 
 -}
 
@@ -625,3 +625,96 @@ toFrenchOrdinalSuffix n =
 
     else
         "e"
+
+
+
+-- Norwegian
+
+
+{-| The Norwegian language!
+-}
+norwegian : Language
+norwegian =
+    Language
+        toNorwegianMonthName
+        (toNorwegianMonthName >> String.left 3)
+        toNorwegianWeekdayName
+        (toNorwegianWeekdayName >> String.left 3)
+        toNorwegianAmPm
+        toNorwegianOrdinalSuffix
+
+
+toNorwegianMonthName : Time.Month -> String
+toNorwegianMonthName month =
+    case month of
+        Jan ->
+            "januar"
+
+        Feb ->
+            "februar"
+
+        Mar ->
+            "mars"
+
+        Apr ->
+            "april"
+
+        May ->
+            "mai"
+
+        Jun ->
+            "juni"
+
+        Jul ->
+            "juli"
+
+        Aug ->
+            "august"
+
+        Sep ->
+            "september"
+
+        Oct ->
+            "oktober"
+
+        Nov ->
+            "november"
+
+        Dec ->
+            "desember"
+
+
+toNorwegianWeekdayName : Time.Weekday -> String
+toNorwegianWeekdayName weekday =
+    case weekday of
+        Mon ->
+            "mandag"
+
+        Tue ->
+            "tirsdag"
+
+        Wed ->
+            "onsdag"
+
+        Thu ->
+            "torsdag"
+
+        Fri ->
+            "fredag"
+
+        Sat ->
+            "lørdag"
+
+        Sun ->
+            "søndag"
+
+
+toNorwegianAmPm : Int -> String
+toNorwegianAmPm _ =
+    -- Norwegian uses 24h formatting only.
+    ""
+
+
+toNorwegianOrdinalSuffix : Int -> String
+toNorwegianOrdinalSuffix _ =
+    "."
