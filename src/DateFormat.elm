@@ -242,9 +242,9 @@ dayOfWeekSuffix =
     DayOfWeekSuffix
 
 
-{-| Gets the name of the day of the week, but just the first two letters.
+{-| Gets the name of the day of the week, but just the first three letters.
 
-Examples: `Su, Mo, Tu, ... Fr, Sa`
+Examples: `Sun, Mon, Tue, ... Fri, Sat`
 
 -}
 dayOfWeekNameAbbreviated : Token
